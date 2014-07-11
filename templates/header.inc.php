@@ -1,7 +1,10 @@
 <html>
 <head>
-	<title>Portal</title>
+	<title><? echo $CONF['title']; ?></title>
 	<link rel="stylesheet" type="text/css" href="templates/style.css" />
+	<? if (!empty($_GET)) {
+				print '<link rel="canonical" href="'.$CONF['url'].basename($_SERVER['PHP_SELF']).'?'.http_build_query($_GET).'"/>';
+	} ?>
 </head>
 <body>
 <header>

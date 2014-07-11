@@ -8,7 +8,9 @@ body {
 	font-family:verdana;
 	margin:0;
 	padding:0;
+	background:url(http://t0.geograph.org.uk/tile.php?map=4oNuOblJ5oNVXXJmoVJ0oNJLo-NlJFouXXJfoXJqo-NXJL5405oujZVlZVXbwwljOV4);
 }
+
 header,div.content,footer {
 	padding:10px;
 }
@@ -29,6 +31,18 @@ header a:hover {
 	text-decoration:underline;
 }
 
+h3 a {
+	font-weight:normal;
+}
+div.submission_prompt {
+	padding-left:50%;
+	text-align:right;
+	font-size:0.8em;
+}
+div.sidebar {
+	float:left;
+	margin-right:20px;
+}
 
 div.thumb {
 	width:120px;
@@ -45,6 +59,10 @@ div.imagerow div.data {
 	padding-left:10px;
 }
 
+ol.stats {
+	margin-left:70px;
+}
+
 .clear {
 	clear:both;
 }
@@ -53,3 +71,4 @@ div.imagerow div.data {
 footer {
 	border-top:1px solid black;
 }
+

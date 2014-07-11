@@ -8,7 +8,7 @@ if (!empty($_POST['image_id'])) {
 	if (!empty($_POST['name'])) {
 		$updates = array();
 		$updates['name'] = $_POST['name'];
-		$sql = $db->updates_to_dupinsert($db->table_label,$updates);
+		$sql = $db->updates_to_insertupdate($db->table_label,$updates);
 		$db->query($sql);
 		$label_ids = array($db->insert_id());
 	} else {

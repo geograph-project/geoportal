@@ -132,19 +132,34 @@ if (empty($CONF['url'])) {
 					<small>Ideally 3 words or less describing the subject of your Portal. Can be the same as the title.</small></td>
 			</tr>
 			<tr>
+				<th>Introduction</th>
+				<td><textarea name="conf[intro]" rows="6" cols="80"><? echo @he($CONF['intro']); ?></textarea><br/>
+					<small>Short paragraph or two introducing your portal, used on the homepage.</small></td>
+			</tr>
+			<tr>
 				<th>URL</th>
 				<td><input type="text" name="conf[url]" value="<? echo @he($CONF['url']); ?>" size="60" maxlength="64"/><br/>
 					<small>The Homepage for your portal - including the tailing slash. Should be autodetected, but only tested on Apache.</small></td>
 			</tr>
 			<tr>
 				<th>Query</th>
-				<td><input type="text" name="conf[query]" value="<? echo @he($CONF['query']); ?>" size="60" maxlength="64"/><br/>
+				<td><input type="text" name="conf[query]" value="<? echo @he($CONF['query']); ?>" size="60" maxlength="64" id="q"/> <a href="#" onclick="return test_q()">Test</a><br/>
 					<small>Ideally provide a VERY GENERAL keyword search that shows images for your portal, eg for a Train Station portal, could be [ "Train Station" | "Railway Station" ]. The exact images used in the portal will be refined later. Dont worry about having false positives on this search. </small></td>
 			</tr>
 			<tr>
-				<th>Introduction</th>
-				<td><textarea name="conf[intro]" rows="6" cols="80"><? echo @he($CONF['intro']); ?></textarea><br/>
-					<small>Short paragraph or two introducing your portal, used on the homepage.</small></td>
+				<th>Tag</th>
+				<td><input type="text" name="conf[tag]" value="<? echo @he($CONF['tag']); ?>" size="60" maxlength="64" id="tag"/> <a href="#" onclick="return test_tag()">Test</a><br/>
+					<small>OPTIONAL If there is a single tag that well represents this portal enter it here.</small></td>
+			</tr>
+			<tr>
+				<th>Geograph Domain</th>
+				<td><input type="text" name="conf[geograph_domain]" value="<? echo @he($CONF['geograph_domain']); ?>" size="60" maxlength="64"/><br/>
+					<small>only tested with www.geograph.org.uk but might work for others</small></td>
+			</tr>
+			<tr>
+				<th>Submission Message</th>
+				<td><textarea name="conf[submission_prompt]" rows="6" cols="80"><? echo @he($CONF['submission_prompt']); ?></textarea><br/>
+					<small>If included will add a prompt to homepaeg, telling users how to submit. Include something along the lines of 'Submit your photograph to Geograph, and be sure to include the [bridge] tag on the image'.</small></td>
 			</tr>
 		</table>
 		<br/>
@@ -152,3 +167,13 @@ if (empty($CONF['url'])) {
 	</form>
 	<a href="./">back to homepage</a>
 	
+<script>
+function test_q() {
+	var q = document.getElementById('q').value;
+	window.open("http://<? echo he($CONF['geograph_domain']); ?>/browser/redirect.php?q="+encodeURIComponent(q));
+}
+function test_tag() {
+	var q = document.getElementById('tag').value;
+	window.open("http://<? echo he($CONF['geograph_domain']); ?>/stuff/tagmap.php?tag="+encodeURIComponent(q));
+}
+</script>

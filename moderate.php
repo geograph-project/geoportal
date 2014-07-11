@@ -4,18 +4,23 @@ include "includes/start.inc.php";
 
 include "templates/header.inc.php";
 
-print '<h3><b>View Images</b> / <a href="breakdown.php?'.http_build_query($_GET).'">Breakdown</a></h3>';
-
+//sets up $where etc... 
 include "includes/filter.inc.php";
 
+if (!empty($_GET['remove'])) {
+	$updates = array();
+	$updates['active'] = 'deleted';
 
-
-if (!empty($where)) {
-	print "<p>Latest matching $limit images...</p>";
-} else {
-	print "<p>Latest $limit images...</p>";
+	$sql = $db->updates_to_update($db->table_image,$updates,'image_id',intval($_GET['remove']));
+	$db->query($sql);
 }
 
+
+
+
+print "<p>Latest $limit images...</p>";
+
+$where = empty($where)?1:implode(" AND ",$where);
 foreach ($db->getAll("SELECT i.* FROM {$db->table_image} i $tables WHERE $where ORDER BY $order LIMIT $limit") as $row) {
 	?>
 	<div class="imagerow">
@@ -30,15 +35,15 @@ foreach ($db->getAll("SELECT i.* FROM {$db->table_image} i $tables WHERE $where 
 			by <a href="?user_id=<? echo he($row['user_id']); ?>"><? echo he($row['realname']); ?></a>
 			for <a href="?gridref=<? echo he($row['grid_reference']); ?>"><? echo he($row['grid_reference']); ?></a>
 			taken <a href="?taken=<? echo he($row['taken']); ?>"><? echo he($row['taken']); ?></a>
+
+			<br/><br/>
+			<input placeholder="enter labels here">  <input type=button value="remove from portal" onclick="location.href='?remove=<? echo $row['image_id']; ?>';">
+			
 		</div>
 		<br class="clear"/>
 	</div>
 	<?
 }
-
-if (!empty($where)) 
-	print "<a href=?>View All Images</a>";
-
 
 include "templates/footer.inc.php";
 

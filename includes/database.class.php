@@ -205,7 +205,7 @@ class Database {
 					$value = "{$m[3]}-{$m[2]}-{$m[1]}";
 				}
 				//numbers and functions, eg NOW()
-				if (is_numeric($value) || preg_match('/^\w+\(\d*\)$/',$value)) {
+				if (preg_match('/^(-?\d+|\w+\(\d*\))$/',$value)) {
 					$a[] = "`$key`=$value";
 				} else {
 					$a[] = "`$key`='".mysql_real_escape_string($value)."'";
@@ -220,11 +220,11 @@ class Database {
 		$table = str_replace('`','',$table); //ugly sql-injection protection!
 		return "INSERT INTO `$table` SET ".join(',',$a);
 	}
-	function updates_to_dupinsert($table,$updates) {
-			$a = $this->updates_to_a($updates);
-			$table = str_replace('`','',$table); //ugly sql-injection protection!
-			return "INSERT INTO `$table` SET ".join(',',$a).",created=NOW() ON DUPLICATE KEY UPDATE ".join(',',$a);
-		}
+	function updates_to_insertupdate($table,$updates) {
+		$a = $this->updates_to_a($updates);
+		$table = str_replace('`','',$table); //ugly sql-injection protection!
+		return "INSERT INTO `$table` SET ".join(',',$a).",created=NOW() ON DUPLICATE KEY UPDATE ".join(',',$a);
+	}
 	
 	function updates_to_update($table,$updates,$primarykey,$primaryvalue) {
 		$a = $this->updates_to_a($updates);
