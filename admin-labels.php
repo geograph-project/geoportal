@@ -2,6 +2,11 @@
 
 include "includes/start.inc.php";
 
+if (empty($_SESSION['user_id']) || empty($_SESSION['moderator']) ) {
+        header("Location: login.php");
+        exit;
+}
+
 include "templates/header.inc.php";
 
 if (!empty($_POST['content'])) {

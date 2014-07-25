@@ -2,6 +2,11 @@
 
 include "includes/start.inc.php";
 
+if (empty($_SESSION['user_id']) || empty($_SESSION['moderator']) ) {
+        header("Location: login.php");
+        exit;
+}
+
 include "templates/header.inc.php";
 
 //sets up $where etc... 
@@ -20,7 +25,6 @@ if (!empty($_GET['remove'])) {
 
 print "<p>Latest $limit images...</p>";
 
-$where = empty($where)?1:implode(" AND ",$where);
 foreach ($db->getAll("SELECT i.* FROM {$db->table_image} i $tables WHERE $where ORDER BY $order LIMIT $limit") as $row) {
 	?>
 	<div class="imagerow">

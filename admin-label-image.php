@@ -2,6 +2,11 @@
 
 include "includes/start.inc.php";
 
+if (empty($_SESSION['user_id']) || empty($_SESSION['moderator']) ) {
+        header("Location: login.php");
+        exit;
+}
+
 include "templates/header.inc.php";
 
 if (!empty($_POST['image_id'])) {
@@ -61,13 +66,14 @@ foreach ($db->getAll("SELECT * FROM {$db->table_image} i LEFT JOIN {$db->table_i
 		<input type="hidden" name="image_id" value="<? echo $row['image_id']; ?>">
 		
 		<input type="text" name="name" placeholder="{enter new label here}" maxlength="64" size="40"> <input type=submit value="add label"><br/>
-		or 
+		<? if (!empty($labels)) { ?>
+		or select: 
 		<select name="label_id[]" size="<? echo min(30,count($labels)); ?>" multiple>
 		<? foreach ($labels as $row) {
 			printf('<option value="%s">%s</option>',$row['label_id'],he($row['name']));
 		}?>
 		</select>
-				
+		<? } ?>
 		
 	
 	

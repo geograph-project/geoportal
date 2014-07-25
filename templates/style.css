@@ -18,6 +18,9 @@ header {
 	color:white;
 	padding: 10px 10px 0 10px;
 }
+header div.login {
+	float:right;
+}
 header h2, header h4 {
 	margin:0;
 }

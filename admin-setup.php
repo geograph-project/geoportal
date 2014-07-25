@@ -2,6 +2,11 @@
 
 include "config.php";
 
+session_start();
+
+//NOTE: We DONT check login status right up here, as this page is special, in that it can work befor users even created. 
+
+
 include "includes/functions.inc.php";
 
 include "includes/database.class.php";
@@ -65,7 +70,49 @@ print "<li>Loaded Configuration from database</li>";
 
 #########################
 
-//todo login!
+$row= $db->getRow("SELECT COUNT(*) as users, rights, user_id FROM {$db->table_user}");
+
+if (empty($row)) {
+	if (empty($CONF['geograph_apikey'])) {
+		//we need to let this continue, so they can use the form to enter their details!
+	} else {
+		//else get them to login!
+		$_SESSION['continue'] = "admin-setup.php";
+		header("Location: ./login.php");
+		exit;
+	}
+} elseif($row['users'] == 1 && $row['rights'] == 'basic') {
+	if ($row['user_id'] == $_SESSION['user_id']) {
+		//they the first user, make them the admin!
+		$db->query("UPDATE {$db->table_user} SET rights = 'basic,admin' WHERE user_id = {$row['user_id']}");
+		print "Congratulations. As the first user, you are now the admin of this portal.";
+	} else {
+		//else get them to login!
+		$_SESSION['continue'] = "admin-setup.php";
+                header("Location: ./login.php");
+                exit;
+	}
+} elseif (!empty($_SESSION['user_id'])) {
+	//they are logged in, chek if admin!
+
+
+	$rights = $db->getOne("SELECT rights FROM {$db->table_user} WHERE user_id = ".intval($_SESSION['user_id']));
+
+        $_SESSION['basic'] = (strpos($rights,'basic') !== FALSE);
+
+        if (!$_SESSION['basic'])
+                die("unable to continue at this time");
+
+        $_SESSION['admin'] = (strpos($rights,'admin') !== FALSE);
+
+        if (!$_SESSION['admin'])
+                die("You need to be an admin to access this page!");
+
+} else {
+	$_SESSION['continue'] = "admin-setup.php";
+	header("Location: ./login.php");
+        exit;	
+}
 
 #########################
 
@@ -115,6 +162,23 @@ if (empty($CONF['url'])) {
 				<td><input type="text" name="conf[url]" value="<? echo @he($CONF['url']); ?>" size="60" maxlength="64"/><br/>
 					<small>The Homepage for your portal - including the tailing slash. Should be autodetected, but only tested on Apache.</small></td>
 			</tr>
+
+                        <tr>
+                                <th>API Key</th>
+                                <td><input type="text" name="conf['geograph_apikey]" value="<? echo @he($CONF['geograph_apikey']); ?>" size="60" maxlength="64"/><br/>
+                                        <small>Your Geograph API Key, get from <a href="http://<? echo $CONF['geograph_domain'];?>/admin/mykey.php">here</a> - remember keep this secret!</small></td>
+                        </tr>
+                        <tr>
+                                <th>API Access Key</th>
+                                <td><input type="text" name="conf['geograph_accesskey]" value="<? echo @he($CONF['geograph_accesskey']); ?>" size="60" maxlength="64"/><br/>
+                                        <small>Your Geograph Access Key, get from <a href="http://<? echo $CONF['geograph_domain'];?>/admin/mykey.php">here</a></small></td>
+                        </tr>
+                        <tr>
+                                <th>API Shared Magic</th>
+                                <td><input type="text" name="conf['geograph_magic]" value="<? echo @he($CONF['geograph_magic']); ?>" size="60" maxlength="64"/><br/>
+                                        <small>Your Geograph Shared Magic, get from <a href="http://<? echo $CONF['geograph_domain'];?>/admin/mykey.php">here</a> - remember keep this secret!</small></td>
+                        </tr>
+
 			<tr>
 				<th>Query</th>
 				<td><input type="text" name="conf[query]" value="<? echo @he($CONF['query']); ?>" size="60" maxlength="64" id="q"/> <a href="#" onclick="return test_q()">Test</a><br/>

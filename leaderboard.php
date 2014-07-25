@@ -42,7 +42,7 @@ $rows = $db->getAll("SELECT user_id,realname,COUNT(*) AS images
 		<tr>
 			<td align=right><? echo ($last > $row['images'])?"$rank.":"&quot;"; ?></td>
 			<td align=right><? echo $row['images']; ?></td>
-			<td><a href="images.php?<? echo http_build_query($_GET)."&amp;$key=".urlencode($row['user_id']); ?>"><? echo he($row['realname']); ?></a></td>
+			<td><a href="images.php?<? echo http_build_query($_GET)."&amp;user_id=".urlencode($row['user_id']); ?>"><? echo he($row['realname']); ?></a></td>
 		</tr>
 		<?
 		$last = $row['images'];
