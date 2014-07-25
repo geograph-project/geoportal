@@ -1,0 +1,170 @@
+-- MySQL dump 10.13  Distrib 5.1.73, for redhat-linux-gnu (x86_64)
+--
+-- Host: localhost    Database: geoportal
+-- ------------------------------------------------------
+-- Server version	5.1.73-log
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `geoportal_configuration`
+--
+
+DROP TABLE IF EXISTS `geoportal_configuration`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `geoportal_configuration` (
+  `configuration_id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(32) NOT NULL,
+  `value` text NOT NULL,
+  `created` datetime NOT NULL,
+  `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`configuration_id`),
+  UNIQUE KEY `name` (`name`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `geoportal_fetcher`
+--
+
+DROP TABLE IF EXISTS `geoportal_fetcher`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `geoportal_fetcher` (
+  `fetcher_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `query` varchar(255) NOT NULL,
+  `images` int(10) unsigned NOT NULL,
+  `start` int(10) unsigned NOT NULL,
+  `last` int(10) unsigned NOT NULL,
+  `total` int(10) unsigned NOT NULL,
+  `fetched` datetime NOT NULL,
+  `created` datetime NOT NULL,
+  `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`fetcher_id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `geoportal_image`
+--
+
+DROP TABLE IF EXISTS `geoportal_image`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `geoportal_image` (
+  `image_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `title` varchar(128) DEFAULT NULL,
+  `submitted` datetime NOT NULL,
+  `category` varchar(32) NOT NULL DEFAULT '',
+  `taken` date NOT NULL DEFAULT '0000-00-00',
+  `grid_reference` varchar(6) NOT NULL DEFAULT '',
+  `user_id` int(10) unsigned NOT NULL,
+  `realname` varchar(128) NOT NULL DEFAULT '',
+  `comment` text NOT NULL,
+  `tags` text NOT NULL,
+  `wgs84_lat` decimal(10,6) NOT NULL DEFAULT '0.000000',
+  `wgs84_long` decimal(10,6) NOT NULL DEFAULT '0.000000',
+  `hash` varchar(8) NOT NULL DEFAULT '',
+  `width` smallint(5) unsigned NOT NULL DEFAULT '0',
+  `height` smallint(5) unsigned NOT NULL DEFAULT '0',
+  `width_original` smallint(5) unsigned NOT NULL DEFAULT '0',
+  `height_original` smallint(5) unsigned NOT NULL DEFAULT '0',
+  `created` datetime NOT NULL,
+  `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `fetched` datetime NOT NULL,
+  `showday` date DEFAULT NULL,
+  `sequence` int(10) unsigned NOT NULL,
+  `active` enum('new','approved','deleted') NOT NULL DEFAULT 'new',
+  `place` varchar(128) NOT NULL,
+  `county` varchar(64) NOT NULL,
+  `country` varchar(64) NOT NULL,
+  `format` varchar(32) NOT NULL,
+  `direction` varchar(10) NOT NULL,
+  `distance` varchar(10) NOT NULL,
+  `status` varchar(32) NOT NULL,
+  `contexts` text NOT NULL,
+  `scenti` bigint(20) NOT NULL,
+  `point` tinyint(4) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`image_id`),
+  KEY `grid_reference` (`grid_reference`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `geoportal_image_label`
+--
+
+DROP TABLE IF EXISTS `geoportal_image_label`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `geoportal_image_label` (
+  `label_id` int(10) unsigned NOT NULL,
+  `image_id` int(10) unsigned NOT NULL,
+  `created` datetime NOT NULL,
+  UNIQUE KEY `label_id` (`label_id`,`image_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `geoportal_label`
+--
+
+DROP TABLE IF EXISTS `geoportal_label`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `geoportal_label` (
+  `label_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `parent_id` int(10) unsigned NOT NULL DEFAULT '0',
+  `name` varchar(64) NOT NULL,
+  `orderby` mediumint(8) unsigned NOT NULL,
+  `created` datetime NOT NULL,
+  `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`label_id`),
+  UNIQUE KEY `name` (`name`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `geoportal_square`
+--
+
+DROP TABLE IF EXISTS `geoportal_square`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `geoportal_square` (
+  `square_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `grid_reference` varchar(6) NOT NULL DEFAULT '',
+  `name` varchar(128) NOT NULL DEFAULT '',
+  `link` varchar(255) NOT NULL DEFAULT '',
+  `wgs84_lat` decimal(10,6) NOT NULL DEFAULT '0.000000',
+  `wgs84_long` decimal(10,6) NOT NULL DEFAULT '0.000000',
+  `e` int(10) unsigned NOT NULL DEFAULT '0',
+  `n` int(10) unsigned NOT NULL DEFAULT '0',
+  `created` datetime NOT NULL,
+  `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `images` mediumint(8) unsigned NOT NULL,
+  PRIMARY KEY (`square_id`),
+  UNIQUE KEY `grid_reference` (`grid_reference`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2014-07-25 23:21:02
