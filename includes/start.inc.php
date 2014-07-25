@@ -10,7 +10,7 @@ $db = new Database;
 $db->connect();
 
 if (!($result = mysql_query("SELECT * FROM {$db->table_configuration}", $db->db))) {
-	header("Location:./setup.php");
+	header("Location:./admin-setup.php");
 	exit;
 }
 
