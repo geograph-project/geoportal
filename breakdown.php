@@ -4,7 +4,7 @@ include "includes/start.inc.php";
 
 include "templates/header.inc.php";
 
-print '<h3><b>Breakdown</b> / <a href="images.php?'.http_build_query($_GET).'">View Images</a></h3>';
+print '<h3><b>Breakdown</b></h3>';
 
 include "includes/filter.inc.php";
 
@@ -13,11 +13,14 @@ if (empty($_GET['by']))
 
 $count = $db->getOne("SELECT COUNT(*) FROM {$db->table_image} $tables WHERE $where");
 
+
+
+print "<div class=\"sidebar\" style=\"width:150px\">";
+
 print "<p>Total Images: <b>$count</b>";
 
+print "<hr/>";
 
-
-print "<p>By: &middot; ";
 
 $list = array(
 	'user_id' => 'Contributor',
@@ -38,11 +41,15 @@ $list = array(
 );
 foreach ($list as $key => $value) {
 	if ($key == $_GET['by']) {
-		print "<b>$value</b> ";
+		print "<b>$value</b><br> ";
 	} else {
-		print "<a href=\"?".http_build_query($_GET)."&amp;by=$key\">$value</a> ";
+		print "&middot; <a href=\"?".http_build_query($_GET)."&amp;by=$key\">$value</a><br> ";
 	}
 }
+print "</div>";
+
+print "<div style=\"padding-left:165px\">";
+print "<h4>Breakdown by {$list[$_GET['by']]}</h4>";
 
 $tables = '';
 $key = $by = $display = '';
@@ -95,18 +102,29 @@ switch($_GET['by']) {
 	
 }
 
-print "<ol class=stats>";
-foreach ($rows as $row) {
-	?>
-	<li value="<? echo $row['images']; ?>">
-		<a href="images.php?<? echo http_build_query($_GET)."&amp;$key=".urlencode($row[$key]); ?>">
-			<? echo he($row[$display]); ?>
-		</a>
-	</li>
-	<?
+if ($_GET['by'] == 'tag') {
+	print "<div class=tags>";
+        foreach ($rows as $row) {
+		$size = (log($row['images'])/2)+0.7;
+                ?>
+			<a href="images.php?<? echo http_build_query($_GET)."&amp;$key=".urlencode($row[$key]); ?>" style="font-size:<? echo $size; ?>em" title="<? echo $row['images']; ?> images"><? echo he($row[$display]); ?></a>
+                <?
+        }
+        print "</div>";
+} else {
+	print "<ol class=stats>";
+	foreach ($rows as $row) {
+		?>
+		<li value="<? echo $row['images']; ?>">
+			<a href="images.php?<? echo http_build_query($_GET)."&amp;$key=".urlencode($row[$key]); ?>"><? echo he($row[$display]); ?></a>
+		</li>
+		<?
+	}
+	print "</ol>";
 }
-print "</ol>";
 
+print "</div>";
+print "<br style=\"clear:both\">";
 
 include "templates/footer.inc.php";
 

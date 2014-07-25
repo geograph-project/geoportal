@@ -30,43 +30,17 @@ print "<li>Database connection successful</li>";
 if (!empty($_POST['create'])) {
 	$tables = $db->getAll("SHOW TABLES LIKE '{$db->prefix}%'");
 	if (!empty($tables)) {
-		//die("Tables already exist - cowardly refusing to continue!");
+		die("Tables already exist - cowardly refusing to continue!");
 	}
 	
-	$db->query("CREATE TABLE {$db->table_configuration} (
-			`configuration_id` MEDIUMINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY ,
-			`name` VARCHAR( 32 ) NOT NULL ,
-			`value` TEXT NOT NULL ,
-			`created` DATETIME NOT NULL ,
-			`updated` TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, 
-			UNIQUE (`name`)
-		) ENGINE = MYISAM");
-	
-	$db->query("CREATE TABLE {$db->table_image} (
-			`image_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-			`title` varchar(128) DEFAULT NULL,
-			`submitted` datetime NOT NULL,
-			`category` varchar(32) NOT NULL DEFAULT '',
-			`taken` date NOT NULL DEFAULT '0000-00-00',
-			`grid_reference` varchar(6) NOT NULL DEFAULT '',
-			`user_id` int(10) unsigned NOT NULL,
-			`profile_link` varchar(255) NOT NULL,
-			`realname` varchar(128) NOT NULL DEFAULT '',
-			`comment` text NOT NULL,
-			`wgs84_lat` decimal(10,6) NOT NULL DEFAULT '0.000000',
-			`wgs84_long` decimal(10,6) NOT NULL DEFAULT '0.000000',
-			`hash` varchar(8) NOT NULL DEFAULT '',
-			`width` smallint(5) unsigned NOT NULL DEFAULT '0',
-			`height` smallint(5) unsigned NOT NULL DEFAULT '0',
-			`width_original` smallint(5) unsigned NOT NULL DEFAULT '0',
-			`height_original` smallint(5) unsigned NOT NULL DEFAULT '0',
-			`created` datetime NOT NULL,
-			`updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-			`fetched` datetime NOT NULL,
-			`showday` date DEFAULT NULL,
-			PRIMARY KEY (`image_id`)
-		) ENGINE=MyISAM");
-	
+	$file = file_get_contents('admin-setup.schema.mysql');
+
+	$commands = explode(";\n",$file);
+
+	foreach ($commands as $command) {
+		$command = str_replace('geoportal_',$db->prefix,$command);
+		$db->query($command);
+	}
 }
 
 #############
@@ -78,7 +52,7 @@ if (!($result = mysql_query("SELECT * FROM {$db->table_configuration}", $db->db)
 	
 	<form method=post>
 		Click this button: 
-		<input type="submit" name="create" value="Create Database Tables"/>
+		<input type="submit" name="create" value="Create Database Tables"/> (or you can import the schema.mysql file manually first, then refresh this page)
 	</form>
 	
 	<?
@@ -160,6 +134,11 @@ if (empty($CONF['url'])) {
 				<th>Submission Message</th>
 				<td><textarea name="conf[submission_prompt]" rows="6" cols="80"><? echo @he($CONF['submission_prompt']); ?></textarea><br/>
 					<small>If included will add a prompt to homepaeg, telling users how to submit. Include something along the lines of 'Submit your photograph to Geograph, and be sure to include the [bridge] tag on the image'.</small></td>
+			</tr>
+			<tr>
+				<th>Coverage Map Source</th>
+				<td><textarea name="conf[square_source]" rows="6" cols="80"><? echo @he($CONF['square_source']); ?></textarea><br/>
+					<small>Lists a credit and explanation for the source of the squares basemap - used for calculating coverage statistics.</small></td>
 			</tr>
 		</table>
 		<br/>

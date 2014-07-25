@@ -28,6 +28,16 @@ if (!empty($_GET['taken']) && preg_match('/^\d{3,4}(-\d{2})*$/',$_GET['taken']))
 
 	$where[] = "taken LIKE ".$db->quote($_GET['taken']."%");
 }
+if (!empty($_GET['submitted']) && preg_match('/^\d{3,4}(-\d{2})*$/',$_GET['submitted'])) {
+	print "&middot; Images Submitted in <a>".he($_GET['submitted'])."</a><br/>";
+
+	$where[] = "submitted LIKE ".$db->quote($_GET['submitted']."%");
+}
+if (!empty($_GET['country']) && preg_match('/^[\w ]+$/',$_GET['country'])) {
+	print "&middot; Images Taken in <a>".he($_GET['country'])."</a><br/>";
+
+	$where[] = "country LIKE ".$db->quote($_GET['country']."%");
+}
 if (!empty($_GET['label']) && preg_match('/^[\w -]+$/',$_GET['label'])) {
 	print "&middot; Images labeled <a href=\"http://{$CONF['geograph_domain']}/of/".urlencode($_GET['label'])."\">".he($_GET['label'])."</a><br/>";
 	

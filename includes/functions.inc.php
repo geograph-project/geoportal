@@ -3,6 +3,10 @@
 function he($in) {
 	return  htmlentities($in);
 }
+function dis($in) {
+	return "<b>".number_format($in,0)."</b>";
+}
+
 function init_session()
 {
 	session_start();

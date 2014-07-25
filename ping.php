@@ -5,7 +5,7 @@ include "includes/start.inc.php";
 if (empty($CONF['query'])) 
 	die("no query");
 
-##getImages($CONF['query']);
+#######################
 
 $start = 0;
 
@@ -37,12 +37,29 @@ print "$sql<br>";
 		$start = $last+1;
 	}
 	$c++;
-} while ($c<10);
+} while ($c<30);
 
+######################
 
+$db->query("CREATE TEMPORARY TABLE coverage_updator (KEY(grid_reference)) SELECT s.grid_reference,COUNT(image_id) AS images 
+		FROM {$db->table_square} s LEFT JOIN {$db->table_image} i ON (i.grid_reference = s.grid_reference AND active != 'deleted') GROUP BY s.grid_reference ORDER BY NULL");
 
+$db->query("UPDATE {$db->table_square} SET images = 0, updated=updated");
+$db->query("UPDATE {$db->table_square} s LEFT JOIN coverage_updator u USING(grid_reference) SET s.images = u.images, s.updated=s.updated");
+
+######################
+
+$db->query("CREATE TEMPORARY TABLE point_updator (KEY(image_id)) SELECT grid_reference,MIN(image_id) AS image_id
+                FROM {$db->table_image} WHERE active != 'deleted' GROUP BY grid_reference ORDER BY NULL");
+
+$db->query("UPDATE {$db->table_image} SET point = 0, updated=updated");
+$db->query("UPDATE {$db->table_image} i INNER JOIN point_updator u USING(image_id) SET i.point = 1, i.updated=i.updated");
+
+######################
 
 print "<hr/>.";
+
+#######################
 
 function getImages($q,$start=0,$limit=1000,$offset=0) {
 	global $db, $CONF;
@@ -85,7 +102,7 @@ function getImages($q,$start=0,$limit=1000,$offset=0) {
 			
 			$db->query($sql);
 			
-			print "{$row->id} ";
+//			print "{$row->id} ";
 			$last = $row->id;
 		}
 	}

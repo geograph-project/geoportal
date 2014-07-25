@@ -8,16 +8,15 @@ body {
 	font-family:verdana;
 	margin:0;
 	padding:0;
-	background:url(http://t0.geograph.org.uk/tile.php?map=4oNuOblJ5oNVXXJmoVJ0oNJLo-NlJFouXXJfoXJqo-NXJL5405oujZVlZVXbwwljOV4);
 }
 
-header,div.content,footer {
+div.content,footer {
 	padding:10px;
 }
 header {
 	background-color: #000066;
 	color:white;
-	border-bottom:1px solid black;
+	padding: 10px 10px 0 10px;
 }
 header h2, header h4 {
 	margin:0;
@@ -30,9 +29,26 @@ header a:hover {
 	color:cyan;
 	text-decoration:underline;
 }
-
-h3 a {
-	font-weight:normal;
+header div.tabs {
+	margin-top:3px;
+}
+header div.tabs a {
+	background-color:gray;
+	border-top-left-radius:5px;
+	border-top-right-radius:5px;
+	margin-right:3px;
+	padding: 0 10px;
+}
+header div.tabs a.selected {
+	background-color:silver;
+}
+div.statbar {
+	background-color:#eee;margin:6px;padding:3px;border:1px solid silver;border-radius:10px;text-align:center;
+}
+div.statbar div.source {
+	font-style:italic;
+	font-size:0.8em;
+	margin-top:10px;
 }
 div.submission_prompt {
 	padding-left:50%;
@@ -41,7 +57,9 @@ div.submission_prompt {
 }
 div.sidebar {
 	float:left;
-	margin-right:20px;
+	padding-right:5px;
+	border-right:1px solid gray;
+	margin-right:15px;
 }
 
 div.thumb {
@@ -59,8 +77,19 @@ div.imagerow div.data {
 	padding-left:10px;
 }
 
+div.tags a {
+	background-color:silver;
+	white-space:nowrap;
+	border-radius:3px;
+	padding:2px;
+	margin:2px;
+	color:blue;
+	text-decoration:none;
+	line-height:1.5em;
+}
+
 ol.stats {
-	margin-left:70px;
+	margin-left:60px;
 }
 
 .clear {
@@ -69,6 +98,27 @@ ol.stats {
 
 
 footer {
-	border-top:1px solid black;
+        background-color: #000066;
+        color:white;
+        padding: 3px 10px 10px 10px;
 }
-
+footer a {
+	padding-right:3px;
+	border-right:1px solid gray;
+        margin-right:3px;
+	color:white;
+	text-decoration:none;
+}
+footer credit {
+	text-align:right;
+	display:block;
+	font-style:italic;
+	color:silver;
+	font-size:0.8em;
+}
+div.warning {
+	background-color:yellow;
+	border:1px solid silver;
+	margin:10px;
+	padding:10px;
+}

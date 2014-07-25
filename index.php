@@ -21,12 +21,38 @@ if (!empty($CONF['submission_prompt'])) {
                 <a href="http://<? echo $CONF['geograph_domain']; ?>/stuff/tagmap.php?tag=<? echo he($CONF['tag']); ?>">Tag Map</a>
         <? }
 
-print "<hr/>";
+if ($squares) { //set by header.php!
+	$row = $db->getRow("SELECT COUNT(*) AS squares, SUM(images>0) AS photographed FROM {$db->table_square}");
 
+	if (!empty($row['squares'])) {
+		print "<div class=statbar title=\"".he($CONF['square_source'])."\">";
+
+		$row['percentage'] = sprintf('%.1f',$row['photographed']/$row['squares']*100);
+		print "Total Squares: ".dis($row['squares']).", of which ".dis($row['photographed'])." have photographs; which is a coverage of <b>{$row['percentage']}%</b>";
+		print " <a href=statistics.php>MORE...</a>";
+		print "</div>";
+	}
+
+	echo "<a href=\"coveragemap.php\"><img src=\"coveragemap.png.php\" width=300 align=right></a>";
+}
+
+
+
+
+if (false) {
 print "<div class=sidebar><p>Labels... (<a href=\"labelled.php\">more</a>)</p>";
 print "<ol>";
 foreach ($db->getAll("SELECT name,COUNT(*) images FROM {$db->table_label} INNER JOIN {$db->table_image_label} USING (label_id) GROUP BY label_id ORDER BY orderby LIMIT 50") as $row) {
 	print "<li value=\"{$row['images']}\"><a href=\"images.php?label=".urlencode($row['name'])."\">".he($row['name'])."</a></li>";
+}
+print "</ol>";
+print "</div>";
+}
+
+print "<div class=sidebar><p>Countries...</p>";
+print "<ol class=stats>";
+foreach ($db->getAll("SELECT country,COUNT(*) images FROM {$db->table_image} GROUP BY country ORDER BY images LIMIT 50") as $row) {
+	print "<li value=\"{$row['images']}\"><a href=\"images.php?country=".urlencode($row['country'])."\">".he($row['country'])."</a></li>";
 }
 print "</ol>";
 print "</div>";

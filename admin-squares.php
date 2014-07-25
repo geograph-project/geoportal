@@ -21,32 +21,26 @@ if (!empty($_POST['content'])) {
 			$db->query($sql);
 			//if (!$id)
 			//	$id = $db->insert_id();
-			
 		}
 	}
-
-
-}
-
-
-function outputFunction($parent_id,$indent=0) {
-	global $db;
-	$rows = $db->getAll("SELECT * FROM {$db->table_square}");
-	if (!empty($rows))
-		foreach ($rows as $row) {
-			print he($row['grid_reference']).' ['.$row['square_id'].']'."\n";
-		}
 }
 
 ?>
 <form method=post>
+
+Use this page to setup a list of squares that this portal covers. Should be ONE gridsquare per line, in 4fig format, eg SH5045, J4542 or TQ1234 - no spaces. 
+
 <ul>
 	<li>Add new Square as needed (omit the id at the end)</li>
 	<li>deleting is not yet supported</li>
 </ul>
 <textarea name="content" rows="50" cols="80"><?
 
-outputFunction(0);
+	$rows = $db->getAll("SELECT * FROM {$db->table_square}");
+	if (!empty($rows))
+		foreach ($rows as $row) {
+			print he($row['grid_reference']).' ['.$row['square_id'].']'."\n";
+		}
 
 ?></textarea>
 <input type=submit value="Save Changes">

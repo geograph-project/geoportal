@@ -4,19 +4,22 @@ include "includes/start.inc.php";
 
 include "templates/header.inc.php";
 
-print '<h3><b>View Images</b> / <a href="breakdown.php?'.http_build_query($_GET).'">Breakdown</a></h3>';
+print '<h3><b>View Images</b></h3>';
 
 include "includes/filter.inc.php";
 
+$rows = $db->getAll("SELECT i.* FROM {$db->table_image} i $tables WHERE $where ORDER BY $order LIMIT $limit");
 
-
-if (!empty($where)) {
+if (count($rows) < $limit) {
+	$limit = count($rows);
+	print "<p>Matching $limit image(s)...</p>";	
+} else if (!empty($where)) {
 	print "<p>Latest matching $limit images...</p>";
 } else {
 	print "<p>Latest $limit images...</p>";
 }
 
-foreach ($db->getAll("SELECT i.* FROM {$db->table_image} i $tables WHERE $where ORDER BY $order LIMIT $limit") as $row) {
+foreach ($rows as $row) {
 	?>
 	<div class="imagerow">
 		<div class=thumb>
