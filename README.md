@@ -14,6 +14,29 @@ Requirements
 * Webserver (Apache Recommended) 
 
 
+Features
+=========
+
+(everything is still mostly at the prototype stage right now) 
+
+* Downloads images along specific critera from Geograph website, and stores in local database (currently on by keyword)
+* Offers various display methods to browse the local database of images
+   Examples includes (filterable) thumbnail displays, breakdown statistics and an overview Google Map. 
+* Curation to exclude permentaly specific images from portal
+* Custom Labels. Attach custom labels to images, to allow facetted browsing
+
+
+Todo
+=========
+
+* Login system - to assign admin, and moderators etc
+* Not optimized for over about 10,000 images - makes minimal use of indexes. 
+* More flexible 'import' system, beyond running simple keyword searches. 
+* More mapping options (eg OS OpenSpace) 
+* More streamlined modeation and labeling facility
+* Way for users to directly add images to the portal
+
+
 Installation
 =========
 
@@ -35,7 +58,17 @@ Installation
 
 * visit http://yourdomain.com/yourfolder/ to begin setup
 
-* follow the prompts
+* fill out the inital configuation
 
-* done. 
+* Visit http://yourdomain.com/yourfolder/ping.php to initially seed it with some images
 
+* Then setup crontab to call ping.php on a regular schedule, say daily. 
+
+Admin
+=========
+
+http://yourdomain.com/yourfolder/admin-moderate.php to remove any unsuitable images
+
+http://yourdomain.com/yourfolder/admin-labels.php to setup custom labels
+
+http://yourdomain.com/yourfolder/admin-label-image.php to assign label(s) to each image. 
