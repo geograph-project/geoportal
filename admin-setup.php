@@ -72,7 +72,7 @@ print "<li>Loaded Configuration from database</li>";
 
 $row= $db->getRow("SELECT COUNT(*) as users, rights, user_id FROM {$db->table_user}");
 
-if (empty($row)) {
+if (empty($row['users'])) {
 	if (empty($CONF['geograph_apikey'])) {
 		//we need to let this continue, so they can use the form to enter their details!
 	} else {
@@ -134,6 +134,10 @@ if (!empty($_POST['update'])) {
 
 if (empty($CONF['url'])) {
 	$CONF['url'] = "http://{$_SERVER['HTTP_HOST']}".dirname($_SERVER['SCRIPT_NAME'])."/";
+}
+
+if (empty($CONF['geograph_apikey'])) {
+	print "<p>WARNING: Until you get an Geograph API key, from <a href='http://{$CONF['geograph_domain']}/admin/mykey.php'>http://{$CONF['geograph_domain']}/admin/mykey.php</a>, ANYBODY can access this page. Once you have a key, can enforce login.</p>";
 }
 
 
