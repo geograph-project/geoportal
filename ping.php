@@ -84,7 +84,8 @@ function getImages($q,$start=0,$limit=1000,$offset=0) {
 			$updates['image_id'] = $row->id;
 			$updates['taken'] = $row->attrs->takenday;
 			$updates['submitted'] = "FROM_UNIXTIME({$row->attrs->submitted})";
-			$updates['category'] = $row->attrs->imageclass;
+			if (!empty($row->attrs->imageclass))
+				$updates['category'] = $row->attrs->imageclass;
 			$updates['wgs84_lat'] = rad2deg($row->attrs->wgs84_lat);
 			$updates['wgs84_long'] = rad2deg($row->attrs->wgs84_long);
 			
