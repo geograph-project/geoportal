@@ -119,6 +119,14 @@ footer credit {
 	color:silver;
 	font-size:0.8em;
 }
+div.footertext {
+	text-align:center;
+	font-size:0.8em;
+	color:gray;
+}
+div.footertext a {
+	color:gray;
+}
 div.warning {
 	background-color:yellow;
 	border:1px solid silver;

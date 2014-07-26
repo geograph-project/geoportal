@@ -16,10 +16,11 @@ if (empty($_GET) && !empty($CONF['query']))
 	$template_links['browser.php'] = 'browser';
 else
 	$template_links['images.php'.$extra] = 'images';
+$template_links['breakdown.php'.$extra] = 'breakdown';
+$template_links['heatmap.php'.$extra] = 'heat map';
 
 if ($squares)
-	$template_links['statistics.php'.$extra] = 'statistics';
-$template_links['breakdown.php'.$extra] = 'breakdown';
+	$template_links['statistics.php'] = 'statistics';
 $template_links['tags.php'] = 'tags';
 $template_links['leaderboard.php'] = 'leaderboard';
 
@@ -27,7 +28,6 @@ $template_links['leaderboard.php'] = 'leaderboard';
 
 if ($squares)
 	$template_links['coveragemap.php'] = 'coverage map';
-$template_links['heatmap.php'.$extra] = 'heat map';
 
 if (!empty($CONF['submission_prompt']))
 	$template_links['submit.php'] = 'submit';

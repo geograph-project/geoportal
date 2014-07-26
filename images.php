@@ -10,7 +10,12 @@ include "includes/filter.inc.php";
 
 $rows = $db->getAll("SELECT i.* FROM {$db->table_image} i $tables WHERE $where ORDER BY $order LIMIT $limit");
 
-if (count($rows) < $limit) {
+if (empty($rows)) {
+	print "<p>No Matching Images found, maybe no suitable images have been submitted to Geograph. Or maybe simply the filtered used to build this portal simply dont cover them.</p>";
+
+	print "<p>If you have any matching images, be sure to <a href=submit.php>submit them</a>! Thank you.</p>";
+
+} else if (count($rows) < $limit) {
 	$limit = count($rows);
 	print "<p>Matching $limit image(s)...</p>";	
 } else if (!empty($where)) {
@@ -40,7 +45,7 @@ foreach ($rows as $row) {
 }
 
 if (!empty($where)) 
-	print "<a href=?>View All Images</a>";
+	print "<hr/><a href=?>View All Images</a>";
 
 
 include "templates/footer.inc.php";

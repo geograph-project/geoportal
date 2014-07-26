@@ -73,7 +73,7 @@ function createMarker(grid_reference,wgs84_lat,wgs84_long,images) {
   });
 
   google.maps.event.addListener(marker, 'click', function() {
-    location.href='./images.php?gridref='+grid_reference
+    window.open('./images.php?gridref='+grid_reference,'_blank');
   });
 
 }
