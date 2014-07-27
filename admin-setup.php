@@ -117,17 +117,25 @@ if (empty($row['users'])) {
 #########################
 
 if (!empty($_POST['update'])) {
+	$BEFORE = $CONF;
+
 	foreach ($_POST['conf'] as $name => $value) {
 		$name = $db->quote($name);
 		$value = $db->quote($value);
 		$db->query("INSERT INTO {$db->table_configuration} SET name=$name, value=$value, created=NOW() ON DUPLICATE KEY UPDATE name=$name, value=$value");
 	}
-	
+
 	foreach ($db->getAll("SELECT * FROM {$db->table_configuration}") as $row) {
 		$CONF[$row['name']] = $row['value'];
 	}
 	
-	print "Configuration Saved";
+	print "<p>Configuration Saved</p>";
+
+	if (!empty($CONF['geograph_apikey']) && !empty($BEFORE['geograph_apikey'])) {
+		print '<meta http-equiv="refresh" content="3; url=?">';
+		print "redirecting in 3 seconds...";
+		exit;	
+	}
 }
 
 #############
@@ -145,28 +153,18 @@ if (empty($CONF['geograph_apikey'])) {
 	</ol>
 	<h2>Configure your portal</h2>
 	<form method=post>
-		<table cellspacing=0 cellpadding=10 border=1 bgcolor=#eee>
-			<tr>
-				<th>Portal Title</th>
-				<td><input type="text" name="conf[title]" value="<? echo @he($CONF['title']); ?>" size="60" maxlength="64"/><br/>
-					<small>General title for your Portal</small></td>
-			</tr>
-			<tr>
-				<th>Portal Subject</th>
-				<td><input type="text" name="conf[subject]" value="<? echo @he($CONF['subject']); ?>" size="60" maxlength="64"/><br/>
-					<small>Ideally 3 words or less describing the subject of your Portal. Can be the same as the title.</small></td>
-			</tr>
-			<tr>
-				<th>Introduction</th>
-				<td><textarea name="conf[intro]" rows="6" cols="80"><? echo @he($CONF['intro']); ?></textarea><br/>
-					<small>Short paragraph or two introducing your portal, used on the homepage.</small></td>
-			</tr>
+		<h3>Geograph Intergration</h3>
+		<table cellspacing=0 cellpadding=10 border=1 bgcolor=#eee width="100%">
 			<tr>
 				<th>URL</th>
 				<td><input type="text" name="conf[url]" value="<? echo @he($CONF['url']); ?>" size="60" maxlength="64"/><br/>
 					<small>The Homepage for your portal - including the tailing slash. Should be autodetected, but only tested on Apache.</small></td>
 			</tr>
-
+			<tr>
+				<th>Geograph Domain</th>
+				<td><input type="text" name="conf[geograph_domain]" value="<? echo @he($CONF['geograph_domain']); ?>" size="60" maxlength="64"/><br/>
+					<small>only tested with www.geograph.org.uk but might work for others</small></td>
+			</tr>
                         <tr>
                                 <th>API Key</th>
                                 <td><input type="text" name="conf['geograph_apikey]" value="<? echo @he($CONF['geograph_apikey']); ?>" size="60" maxlength="64"/><br/>
@@ -182,6 +180,31 @@ if (empty($CONF['geograph_apikey'])) {
                                 <td><input type="text" name="conf['geograph_magic]" value="<? echo @he($CONF['geograph_magic']); ?>" size="60" maxlength="64"/><br/>
                                         <small>Your Geograph Shared Magic, get from <a href="http://<? echo $CONF['geograph_domain'];?>/admin/mykey.php">here</a> - remember keep this secret!</small></td>
                         </tr>
+		</table>
+		<? if (!empty($CONF['geograph_apikey'])) { ?>
+			If you've just filled out the above details, its recommended to <input type="submit" name="update" value="Save Configuration"/> now, before continuing with the rest of the configuration.
+		<? } ?>
+
+		<h3>General Settings</h3>
+		<table cellspacing=0 cellpadding=10 border=1 bgcolor=#eee width="100%">
+			<tr>
+				<th>Portal Title</th>
+				<td><input type="text" name="conf[title]" value="<? echo @he($CONF['title']); ?>" size="60" maxlength="64"/><br/>
+					<small>General title for your Portal</small></td>
+			</tr>
+			<tr>
+				<th>Portal Subject</th>
+				<td><input type="text" name="conf[subject]" value="<? echo @he($CONF['subject']); ?>" size="60" maxlength="64"/><br/>
+					<small>Ideally 3 words or less describing the subject of your Portal. Can be the same as the title.</small></td>
+			</tr>
+			<tr>
+				<th>Introduction</th>
+				<td><textarea name="conf[intro]" rows="6" cols="80"><? echo @he($CONF['intro']); ?></textarea><br/>
+					<small>Short paragraph or two introducing your portal, used on the homepage.</small></td>
+			</tr>
+		</table>
+		<h3>Portal Contents</h3>
+		<table cellspacing=0 cellpadding=10 border=1 bgcolor=#eee width="100%">
 
 			<tr>
 				<th>Query</th>
@@ -194,11 +217,6 @@ if (empty($CONF['geograph_apikey'])) {
 					<small>OPTIONAL If there is a single tag that well represents this portal enter it here.</small></td>
 			</tr>
 			<tr>
-				<th>Geograph Domain</th>
-				<td><input type="text" name="conf[geograph_domain]" value="<? echo @he($CONF['geograph_domain']); ?>" size="60" maxlength="64"/><br/>
-					<small>only tested with www.geograph.org.uk but might work for others</small></td>
-			</tr>
-			<tr>
 				<th>Submission Message</th>
 				<td><textarea name="conf[submission_prompt]" rows="6" cols="80"><? echo @he($CONF['submission_prompt']); ?></textarea><br/>
 					<small>If included will add a prompt to homepaeg, telling users how to submit. Include something along the lines of 'Submit your photograph to Geograph, and be sure to include the [bridge] tag on the image'.</small></td>
@@ -206,7 +224,7 @@ if (empty($CONF['geograph_apikey'])) {
 			<tr>
 				<th>Coverage Map Source</th>
 				<td><textarea name="conf[square_source]" rows="6" cols="80"><? echo @he($CONF['square_source']); ?></textarea><br/>
-					<small>Lists a credit and explanation for the source of the squares basemap - used for calculating coverage statistics.</small></td>
+					<small>OPTIONAL Lists a credit and explanation for the source of the squares basemap - used for calculating coverage statistics.</small></td>
 			</tr>
 		</table>
 		<br/>
