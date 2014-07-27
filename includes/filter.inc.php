@@ -12,6 +12,11 @@ if (!empty($_GET['user_id']) && is_numeric($_GET['user_id'])) {
 
 	$where[] = "user_id = {$_GET['user_id']}";
 }
+if (!empty($_GET['point']) && is_numeric($_GET['point'])) {
+	print "&middot; Got a point<br/>";
+
+	$where[] = "point = {$_GET['point']}";
+}
 if (!empty($_GET['gridref']) && preg_match('/^(\w{1,2})(\d?)(\d?)(\d{2})?$/',$_GET['gridref'],$m)) {
 	print "&middot; Images in <a href=\"http://{$CONF['geograph_domain']}/gridref/{$_GET['gridref']}\">".he($_GET['gridref'])."</a><br/>";
 	

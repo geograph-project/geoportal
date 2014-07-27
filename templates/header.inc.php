@@ -19,16 +19,13 @@ else
 $template_links['breakdown.php'.$extra] = 'breakdown';
 $template_links['heatmap.php'.$extra] = 'heat map';
 
-$template_links['tags.php'] = 'tags';
 if ($squares) {
 	$template_links['statistics.php'] = 'statistics';
 	$template_links['leaderboard.php'] = 'leaderboard';
+	$template_links['coveragemap.php'] = 'coverage map';
 }
 if ($db->getOne("SELECT COUNT(*) FROM {$db->table_image_label}"))
 	$template_links['labels.php'] = 'labels';
-
-if ($squares)
-	$template_links['coveragemap.php'] = 'coverage map';
 
 if (!empty($CONF['submission_prompt']))
 	$template_links['submit.php'] = 'submit';
