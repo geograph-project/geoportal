@@ -6,6 +6,8 @@ include "includes/functions.inc.php";
 include "includes/database.class.php";
 include "includes/token.class.php";
 
+$CONF['version'] = 'v0.2 alpha';
+
 $db = new Database;
 $db->connect();
 

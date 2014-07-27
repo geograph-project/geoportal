@@ -29,7 +29,7 @@ if (empty($_GET['dynamic'])) { ?>
 		Note: This is only a quick plot. Its not zoomable nor clickable. Can switch to <a href="?dynamic=true">dynamic version</a> which, while interactive, is slow.
 	</div>
 
-	<p>Red ares with images, Green are squares without</p>
+	<p>Red are squares with images, Green are squares without. Switch to dynamic version to be able to click a point.</p>
 	<img src="coveragemap.png.php">
 	
 <? } else { 

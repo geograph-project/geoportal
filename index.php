@@ -39,17 +39,17 @@ if ($squares) { //set by header.php!
 
 
 
+print "<div class=sidebar style=width:280px>";
 if (false) {
-print "<div class=sidebar><p>Labels... (<a href=\"labelled.php\">more</a>)</p>";
+print "<p>Labels... (<a href=\"labelled.php\">more</a>)</p>";
 print "<ol>";
 foreach ($db->getAll("SELECT name,COUNT(*) images FROM {$db->table_label} INNER JOIN {$db->table_image_label} USING (label_id) GROUP BY label_id ORDER BY orderby LIMIT 50") as $row) {
 	print "<li value=\"{$row['images']}\"><a href=\"images.php?label=".urlencode($row['name'])."\">".he($row['name'])."</a></li>";
 }
 print "</ol>";
-print "</div>";
 }
 
-print "<div class=sidebar><p>Countries...</p>";
+print "<p>Countries...</p>";
 print "<ol class=stats>";
 foreach ($db->getAll("SELECT country,COUNT(*) images FROM {$db->table_image} GROUP BY country ORDER BY images LIMIT 50") as $row) {
 	print "<li value=\"{$row['images']}\"><a href=\"images.php?country=".urlencode($row['country'])."\">".he($row['country'])."</a></li>";
@@ -57,7 +57,7 @@ foreach ($db->getAll("SELECT country,COUNT(*) images FROM {$db->table_image} GRO
 print "</ol>";
 print "</div>";
 
-
+print "<div style=\"margin-left:300px\">";
 print "<p>A sampling of images... (<a href=\"images.php\">more</a>)</p>";
 
 foreach ($db->getAll("SELECT * FROM {$db->table_image} WHERE active != 'deleted' ORDER BY sequence LIMIT 16") as $row) {
@@ -73,11 +73,12 @@ foreach ($db->getAll("SELECT * FROM {$db->table_image} WHERE active != 'deleted'
 
 ?>
 <br class="clear"/>
+</div>
 <?
 
-print "<div><p>Decades ... ";
+print "<div class=statbar><p>Decades ... ";
 foreach ($db->getAll("SELECT substring(taken,1,3) as decade,COUNT(*) images FROM {$db->table_image} GROUP BY substring(taken,1,3) LIMIT 50") as $row) {
-	print "<a href=\"images.php?taken=".urlencode($row['decade'])."\">".he($row['decade'])."0s</a>({$row['images']}) &middot; ";
+	print "<a href=\"images.php?taken=".urlencode($row['decade'])."\"><b>".he($row['decade'])."0</b>s</a>({$row['images']}) &middot; ";
 }
 print "</ol>";
 print "</div>";

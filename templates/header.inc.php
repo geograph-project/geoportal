@@ -33,6 +33,8 @@ if ($squares)
 if (!empty($CONF['submission_prompt']))
 	$template_links['submit.php'] = 'submit';
 
+$template_links['about.php'] = 'about';
+
 ?>
 <html>
 <head>
