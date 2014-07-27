@@ -53,7 +53,7 @@ var map;
 
 var pointData = [<?
 
-$rows = $db->getAll("SELECT grid_reference,wgs84_lat,wgs84_long,images FROM {$db->table_square}") ;
+$rows = $db->getAll("SELECT grid_reference,wgs84_lat,wgs84_long,images FROM {$db->table_square} WHERE wgs84_lat != 0") ;
 
 $sep = '';
 foreach ($rows as $row) {

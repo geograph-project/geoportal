@@ -49,6 +49,23 @@ if (!empty($images)) {
 
 ######################
 
+if ($db->getOne("SELECT square_id FROM {$db->table_square} WHERE wgs84_lat=0 LIMIT 1")) {
+	include "includes/conversionslatlong.class.php";
+	$conv = new ConversionsLatLong();
+	$updates=array();
+	foreach ($db->getAll("SELECT square_id,e,n,grid_reference FROM {$db->table_square} WHERE wgs84_lat=0") as $row) {
+		$func = (strlen($row['grid_reference'])==5)?'irish_to_wgs84':'osgb36_to_wgs84';
+		list($updates['wgs84_lat'],$updates['wgs84_long']) = $conv->{$func}($row['e'],$row['n']);		
+
+	        $sql = $db->updates_to_update($db->table_square,$updates,'square_id',$row['square_id']);
+
+		print "$sql<br>";
+		$db->query($sql);
+	}
+}
+
+######################
+
 print "<hr/>.";
 
 #######################

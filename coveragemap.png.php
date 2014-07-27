@@ -9,7 +9,7 @@ $pix = 2;
 
 #################
 
-$rows = $db->getAll("SELECT wgs84_lat,wgs84_long,images FROM {$db->table_square}") ;
+$rows = $db->getAll("SELECT wgs84_lat,wgs84_long,images FROM {$db->table_square} where wgs84_lat != 0") ;
 if (empty($rows) || $rows[0]['wgs84_lat'] < 1) {
 	die("unable to plot points");
 }
