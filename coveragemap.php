@@ -44,8 +44,9 @@ if (empty($_GET['dynamic'])) { ?>
 
 <p><img src="dot_red.gif"> A square with photo(s), and <img src="dot_green.gif"> no photos in the square. Click a red dot to view images</p>
 
-    <div id="map-canvas" style="width:700px;height:800px;">Please wait... (this map may take a LONG time to show!</div>
-
+    <div id="map-canvas" style="width:700px;height:800px;float:left">Please wait... (this map may take a LONG time to show!</div>
+    <div id="thumbbar" style="width:150px;margin-left:20px;float:left"></div>
+	<br style=clear:both>
 
  <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
   <script>
@@ -73,7 +74,8 @@ function createMarker(grid_reference,wgs84_lat,wgs84_long,images) {
   });
 
   google.maps.event.addListener(marker, 'click', function() {
-    window.open('./images.php?gridref='+grid_reference,'_blank');
+    //window.open('./images.php?gridref='+grid_reference,'_blank');
+    loadImages(grid_reference);
   });
 
 }
@@ -101,6 +103,41 @@ function initialize() {
 google.maps.event.addDomListener(window, 'load', initialize);
 
     </script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+  <script>
+	function loadImages(gridref) {
+		$.getJSON( "square.ajax.php", {gridref:gridref}, function( data ) {
+			if (data) {
+				var ele = $('#thumbbar').empty()
+					.append('<big><b>'+gridref+'</b></big> <br>')
+					.append(' ('+data.images+' images) <br>');
+				if (data.name)
+					ele.append('<b>'+data.name+'</b> <br>');
+				if (data.link) {
+					var tmp = document.createElement('a');
+					tmp.href = data.link;
+					var link = tmp.hostname.replace(/^www./,'');
+					ele.append('<a href="'+data.link+'">'+link+'</a> <br>');
+				}
+				if (data.domain)
+					ele.append('<a href="http://'+data.domain+'/gridref/'+gridref+'">'+data.domain.replace(/^www./,'')+'</a> <br>');
+				if (data.rows) {
+					ele.append('<br>');
+					jQuery.each( data.rows, function( i, v ) {
+						ele.append('<div class="thumb"><a href="http://'+data.domain+'/photo/'+v.image_id+'" title="'+v.title+' by '+v.realname+'">'+
+							'<img src="'+v.thumb+'"></a></div>');
+					});
+					if (data.rows.length < data.images) {
+						ele.append('<a href="images.php?gridref='+gridref+'">view more...</a>');
+					}
+				}
+			} else {
+				$('#thumbbar').html("no results");
+			}
+		});
+	}
+  </script>
+
 
 <?
 }
