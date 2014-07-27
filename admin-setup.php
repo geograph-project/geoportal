@@ -131,7 +131,7 @@ if (!empty($_POST['update'])) {
 	
 	print "<p>Configuration Saved</p>";
 
-	if (!empty($CONF['geograph_apikey']) && !empty($BEFORE['geograph_apikey'])) {
+	if (!empty($CONF['geograph_apikey']) && empty($BEFORE['geograph_apikey'])) {
 		print '<meta http-equiv="refresh" content="3; url=?">';
 		print "redirecting in 3 seconds...";
 		exit;	
@@ -181,7 +181,7 @@ if (empty($CONF['geograph_apikey'])) {
                                         <small>Your Geograph Shared Magic, get from <a href="http://<? echo $CONF['geograph_domain'];?>/admin/mykey.php">here</a> - remember keep this secret!</small></td>
                         </tr>
 		</table>
-		<? if (!empty($CONF['geograph_apikey'])) { ?>
+		<? if (empty($CONF['geograph_apikey'])) { ?>
 			If you've just filled out the above details, its recommended to <input type="submit" name="update" value="Save Configuration"/> now, before continuing with the rest of the configuration.
 		<? } ?>
 
