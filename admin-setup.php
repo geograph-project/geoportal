@@ -38,7 +38,7 @@ if (!empty($_POST['create'])) {
 		die("Tables already exist - cowardly refusing to continue!");
 	}
 	
-	$file = file_get_contents('admin-setup.schema.mysql');
+	$file = file_get_contents('includes/database.schema.mysql');
 
 	$commands = explode(";\n",$file);
 
