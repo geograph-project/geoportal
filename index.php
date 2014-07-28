@@ -60,7 +60,7 @@ print "</div>";
 print "<div style=\"margin-left:300px\">";
 print "<p>A sampling of images... (<a href=\"images.php\">more</a>)</p>";
 
-foreach ($db->getAll("SELECT * FROM {$db->table_image} WHERE active != 'deleted' ORDER BY sequence LIMIT 16") as $row) {
+foreach ($db->getAll("SELECT * FROM {$db->table_image} WHERE active != 'deleted' ORDER BY RAND(DATE(NOW())+0) LIMIT 16") as $row) {
 	?>
 	<div class=thumb>
 		<a href="http://<? echo $CONF['geograph_domain']; ?>/photo/<? echo $row['image_id']; ?>" 

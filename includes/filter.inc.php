@@ -38,6 +38,11 @@ if (!empty($_GET['submitted']) && preg_match('/^\d{3,4}(-\d{2})*$/',$_GET['submi
 
 	$where[] = "submitted LIKE ".$db->quote($_GET['submitted']."%");
 }
+if (!empty($_GET['created']) && preg_match('/^\d{3,4}(-\d{2})*$/',$_GET['created'])) {
+	print "&middot; Images Added to Portal in <a>".he($_GET['created'])."</a><br/>";
+
+	$where[] = "created LIKE ".$db->quote($_GET['created']."%");
+}
 if (!empty($_GET['country']) && preg_match('/^[\w ]+$/',$_GET['country'])) {
 	print "&middot; Images Taken in <a>".he($_GET['country'])."</a><br/>";
 
@@ -66,6 +71,10 @@ if (!empty($_GET['context']) && preg_match('/^[\w:, -]+$/',$_GET['context'])) {
 if (!empty($_GET['q']) && preg_match('/^\w+$/',$_GET['q'])) {
 	print "&middot; Title containing {<a href=\"http://{$CONF['geograph_domain']}/of/title:".urlencode($_GET['q'])."\">".he($_GET['q'])."</a>}<br/>";
   $where[] = "title LIKE ".$db->quote('%'.$_GET['q'].'%');
+}
+
+if (count($where) > 1) {
+	print "<br>";
 }
 
 $where = empty($where)?1:implode(" AND ",$where);
