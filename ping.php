@@ -5,14 +5,18 @@ include "includes/fetching.inc.php";
 
 #######################
 
+if ($db->getOne("SELECT fetcher_id FROM {$db->table_fetcher} WHERE fetched>DATE_SUB(NOW(),INTERVAL 1 HOUR) LIMIT 1")) {
+	die("already run recently, dying.\n");
+}
+
 if (!empty($CONF['query'])) {
 
 	$start = 0;
 
 	do {
-		$row = $db->getRow("SELECT *,IF(fetched>DATE_SUB(NOW(),INTERVAL 30 DAY),1,0) `recent` FROM {$db->table_fetcher} WHERE `start` = $start AND `query` = ".$db->quote($CONF['query']) );
+		$row = $db->getRow("SELECT *,IF(fetched>DATE_SUB(NOW(),INTERVAL 7 DAY),1,0) `recent` FROM {$db->table_fetcher} WHERE `start` = $start AND `query` = ".$db->quote($CONF['query']) );
 
-		if (!empty($row) && $row['recent']) {
+		if (!empty($row) && $row['recent'] && $row['images'] == 1000) {
 			//recently fetched!
 			$start = $row['last']+1;
 		} else {
@@ -31,7 +35,7 @@ if (!empty($CONF['query'])) {
 			print "$sql<br>";
         	        $db->query($sql);
 
-			if (empty($images))
+			if (empty($images) || $images < 1000)
 				break;
 
 			$start = $last+1;
@@ -59,7 +63,7 @@ if ($db->getOne("SELECT square_id FROM {$db->table_square} WHERE wgs84_lat=0 LIM
 
 	        $sql = $db->updates_to_update($db->table_square,$updates,'square_id',$row['square_id']);
 
-		print "$sql<br>";
+		print ". ";
 		$db->query($sql);
 	}
 }
