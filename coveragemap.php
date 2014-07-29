@@ -42,7 +42,7 @@ if (empty($_GET['dynamic'])) { ?>
 	This is only a prototype map. Because there are so many points the map is very slow and cumbersome. A real portal should have a better optimised map!
 </div>
 
-<p><img src="dot_red.gif"> A square with photo(s), and <img src="dot_green.gif"> no photos in the square. Click a red dot to view images</p>
+<p><img src="templates/dot_red.gif"> A square with photo(s), and <img src="templates/dot_green.gif"> no photos in the square. Click a red dot to view images</p>
 
     <div id="map-canvas" style="width:700px;height:800px;float:left">Please wait... (this map may take a LONG time to show!</div>
     <div id="thumbbar" style="width:150px;margin-left:20px;float:left"></div>
@@ -62,8 +62,8 @@ foreach ($rows as $row) {
 	$sep = ',';
 } ?>];
 
-var redicon= new google.maps.MarkerImage('dot_red.gif',null,null,null,new google.maps.Size(10,10));
-var greenicon= new google.maps.MarkerImage('dot_green.gif',null,null,null,new google.maps.Size(10,10));
+var redicon= new google.maps.MarkerImage('templates/dot_red.gif',null,null,null,new google.maps.Size(10,10));
+var greenicon= new google.maps.MarkerImage('templates/dot_green.gif',null,null,null,new google.maps.Size(10,10));
 
 function createMarker(grid_reference,wgs84_lat,wgs84_long,images) {
   var marker = new google.maps.Marker({

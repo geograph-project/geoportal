@@ -38,6 +38,7 @@ $list = array(
 	'label' => 'Labels',
 	'tag' => 'Tags',
 	'context' => 'Geographical Context',
+	'created' => 'Added to portal',
 );
 foreach ($list as $key => $value) {
 	if ($key == $_GET['by']) {
@@ -59,6 +60,7 @@ switch($_GET['by']) {
 	case 'country': $key = $by = $_GET['by'];
 		
 	case 'user_id': if (empty($by)) { $key = $by = 'user_id'; $display = 'realname'; }
+	case 'created': if (empty($by)) { $key = 'created'; $by = 'substring(created,1,10)'; } 
 	case 'day': if (empty($by)) { $key = 'taken'; $by = 'taken'; } 
 	case 'month': if (empty($by)) { $key = 'taken'; $by = 'substring(taken,1,7)'; } 
 	case 'year': if (empty($by)) { $key = 'taken'; $by = 'substring(taken,1,4)'; } 

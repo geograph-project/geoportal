@@ -32,6 +32,9 @@ if (!empty($CONF['submission_prompt']))
 
 $template_links['about.php'] = 'about';
 
+if (!empty($_SESSION['admin']))
+	$template_links['admin.php'] = 'Admin';
+
 ?>
 <html>
 <head>
@@ -45,18 +48,14 @@ $template_links['about.php'] = 'about';
 <header>
 	<div class="login">
 	<? if (!empty($_SESSION['user_id'])) { ?>
-		Welcome <? echo he($_SESSION['realname']);
-		if (!empty($_SESSION['admin'])) {
-			print ", <a href=admin.php>Admin</a>";
-		}
-		?>, <a href="login.php?logout=true">Logout</a>
+		Welcome <? echo he($_SESSION['realname']); ?>, <a href="login.php?logout=true">Logout</a>
 	<? } else { ?>
 		<a href="login.php">Login</a>
 	<? } ?>
 	</div>
 	<h2><a href="./"><? echo he($CONF['title']); ?></a></h2>
 	<? if (!empty($CONF['subject']) && $CONF['subject'] != $CONF['title']) {
-		print "<h4>A portal about ".he($CONF['subject'])."</h4>";
+		print "<h4>Geograph Images of ".he($CONF['subject'])."</h4>";
 	} ?>
 	<div class="tabs">
 		<? foreach ($template_links as $link => $html) {
