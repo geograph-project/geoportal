@@ -45,6 +45,11 @@ header div.tabs a {
 header div.tabs a.selected {
 	background-color:silver;
 }
+div.intro {
+	background-color:#eee;
+	padding:5px;
+	border-radius:15px;
+}
 div.statbar {
 	background-color:#eee;margin:6px;padding:3px;border:1px solid silver;border-radius:10px;text-align:center;
 }

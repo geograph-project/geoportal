@@ -32,7 +32,7 @@ if (!empty($CONF['query'])) {
 			
 	                $sql = $db->updates_to_insertupdate($db->table_fetcher,$updates);
 
-			print "$sql<br>";
+			print "$sql<br>\n";
         	        $db->query($sql);
 
 			if (empty($images) || $images < 1000)
@@ -70,7 +70,7 @@ if ($db->getOne("SELECT square_id FROM {$db->table_square} WHERE wgs84_lat=0 LIM
 
 ######################
 
-print "<hr/>.";
+print "<hr/>.\n";
 
 #######################
 

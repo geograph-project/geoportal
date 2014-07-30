@@ -27,6 +27,10 @@ if ($squares) { //set by header.php!
         echo "<a href=\"coveragemap.php\"><img src=\"coveragemap.png.php\" width=300 align=right></a>";
 }
 
+if (!empty($CONF['intro'])) {
+        print "<div class=intro>".nl2br(he($CONF['intro']))."</div>";
+}
+
 ?>
 
 <p>This website is a mini-website created as a way to view a subset of images from <a href="http://<? echo $CONF['geograph_domain']; ?>/"><? echo $CONF['geograph_domain']; ?></a>.</p>
