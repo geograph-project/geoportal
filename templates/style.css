@@ -39,11 +39,15 @@ header div.tabs a {
 	background-color:gray;
 	border-top-left-radius:5px;
 	border-top-right-radius:5px;
-	margin-right:3px;
-	padding: 0 10px;
+	padding: 0 8px;
 }
 header div.tabs a.selected {
 	background-color:silver;
+}
+div.intro {
+	background-color:#eee;
+	padding:5px;
+	border-radius:15px;
 }
 div.statbar {
 	background-color:#eee;margin:6px;padding:3px;border:1px solid silver;border-radius:10px;text-align:center;
@@ -91,6 +95,13 @@ div.tags a {
 	line-height:1.5em;
 }
 
+h4.group {
+	clear:both;
+	border-top:10px solid white;
+	background-color:#eee;
+	padding:4px;
+}
+
 ol.stats {
 	margin-left:60px;
 }
@@ -106,9 +117,9 @@ footer {
         padding: 3px 10px 10px 10px;
 }
 footer a {
-	padding-right:3px;
+	padding-right:5px;
 	border-right:1px solid gray;
-        margin-right:3px;
+        margin-right:5px;
 	color:white;
 	text-decoration:none;
 }
