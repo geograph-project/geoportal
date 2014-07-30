@@ -12,7 +12,7 @@ INNER JOIN {$db->table_label} USING (label_id)
 ORDER BY name,RAND() LIMIT 40") as $row) {
 
 	if ($last != $row['label_id']) {
-		print "<h4 class=clear>".he($row['name'])."</h4>";
+		print "<h4 class=\"group\">".he($row['name'])."</h4>";
 		$last = $row['label_id'];
 	}
 
