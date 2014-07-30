@@ -5,7 +5,7 @@ include "includes/start.inc.php";
 include "templates/header.inc.php";
 
 if (!empty($CONF['intro'])) {
-	print "<div class=intro>".nl2br(he($CONF['intro']))."</div>";
+	print "<div class=intro>".nl2br(MakeLinks(he($CONF['intro'])))."</div>";
 }
 if (!empty($CONF['submission_prompt'])) {
 	print "<div class=submission_prompt>".nl2br(he($CONF['submission_prompt']))." <a href=\"http://{$CONF['geograph_domain']}/submit.php\">Open Geograph Submission Process</a></div>";

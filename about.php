@@ -28,7 +28,7 @@ if ($squares) { //set by header.php!
 }
 
 if (!empty($CONF['intro'])) {
-        print "<div class=intro>".nl2br(he($CONF['intro']))."</div>";
+        print "<div class=intro>".nl2br(MakeLinks(he($CONF['intro'])))."</div>";
 }
 
 ?>
@@ -62,7 +62,7 @@ if (!empty($row['squares'])) {
         print "<div class=statbar>";
 
         if (!empty($CONF['square_source'])) {
-                print "<div class=source>".nl2br(he($CONF['square_source']))."</div>";
+                print "<div class=source>".nl2br(MakeLinks(he($CONF['square_source'])))."</div>";
         }
 
         print "</div>";
