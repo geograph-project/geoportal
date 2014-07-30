@@ -8,6 +8,9 @@ print '<h3><b>View Images</b></h3>';
 
 include "includes/filter.inc.php";
 
+if (empty($_GET['order']))
+	$_GET['order'] = $order;
+
 	$orders = array(
 		'created' => 'Added to portal',
 		'submitted' => 'Submitted to Geograph',
@@ -38,6 +41,13 @@ include "includes/filter.inc.php";
 						$order = $key;
 				} ?>
 			</optgroup>
+			<?
+				$key = 'sequence asc'; $value = 'Geographical Spread';
+				printf('<option value="%s"%s>%s</option>',$key,$_GET['order']==$key?' selected':'',$value);
+				if ($_GET['order']==$key)
+                                        $order = $key;
+
+			?>
 		</select>
 	</form>
 	<?
