@@ -8,6 +8,8 @@ include "templates/header.inc.php";
 
 <h3>Unphotographed Squares</h3>
 
+<p>Can also view the <a href="coveragemap.php?dynamic=true&images=0">green squares on a map</a></p>
+
 <div class="sidebar" style="width:200px">
 
 <ol class=stats><?
@@ -23,6 +25,7 @@ foreach ($db->getAll("SELECT SUBSTRING(grid_reference,1,LENGTH(grid_reference)-4
 </div>
 <div style="margin-left:220px">
 <h4>150 Random squares</h4>
+
 
 <ul>
 <?
@@ -45,7 +48,7 @@ if (!empty($_GET['gridref']) && preg_match('/^(\w{1,2})(\d?)(\d?)(\d{2})?$/',$_G
         $where = implode(" AND ",$where);
 
 foreach ($db->getAll("SELECT * FROM {$db->table_square} WHERE $where ORDER BY RAND() LIMIT 150") as $row) {
-	print "<li><b>{$row['grid_reference']}</b> ";
+	print "<li><b><a href=\"http://{$CONF['geograph_domain']}/gridref/{$row['grid_reference']}\">{$row['grid_reference']}</a></b> ";
 	if (!empty($row['link'])) {
 		print "<a href=\"{$row['link']}\">";
 	}
