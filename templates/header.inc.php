@@ -38,6 +38,7 @@ if (!empty($_SESSION['admin']))
 <head>
 	<title><? echo $CONF['title']; ?></title>
 	<link rel="stylesheet" type="text/css" href="templates/style.css" />
+	<link rel="shortcut icon" type="image/x-icon" href="favicon.ico"/>
 	<? if (!empty($_GET)) {
 				print '<link rel="canonical" href="'.$CONF['url'].basename($_SERVER['PHP_SELF']).'?'.http_build_query($_GET).'"/>';
 	} ?>
