@@ -2,10 +2,13 @@
 
 include "includes/start.inc.php";
 
-$scalex = 50; //$pixels = $degress * $scale
-$scaley = 80; //not equal because we using lat/long here, which isnt square!
-$pix = 2;
+$plot = empty($CONF['imagemap_grid_display'])?'wgs84':$CONF['imagemap_grid_display']; //todo - this is not honoured!
 
+$scalex = empty($CONF['imagemap_scalex'])?50:$CONF['imagemap_scalex']; //$pixels = $degress * $scale
+$scaley = empty($CONF['imagemap_scaley'])?80:$CONF['imagemap_scaley']; //not equal because we using lat/long here, which isnt square!
+$pix = empty($CONF['imagemap_pixels'])?2:$CONF['imagemap_pixels']; //number of pixels padding
+
+$decimals = empty($CONF['imagemap_decimals'])?2:$CONF['imagemap_decimals']; //decimal places to round decrees (eg 0 = whole degree, 1 is to nearest 0.1degree etc)
 
 #################
 
@@ -25,14 +28,22 @@ $south = min($y);
 $east = max($x);
 $west = min($x);
 
+function floordec($zahl){    
+	global $decimals;
+     return floor($zahl*pow(10,$decimals))/pow(10,$decimals);
+}
+function ceildec($zahl){
+	global $decimals;
+     return ceil($zahl*pow(10,$decimals))/pow(10,$decimals);
+}
 
-$width = (ceil($east)-floor($west)) * $scalex;
-$height = (ceil($north)-floor($south)) * $scaley;
+$width = (ceildec($east)-floordec($west)) * $scalex;
+$height = (ceildec($north)-floordec($south)) * $scaley;
 
 ###################
 
-$south = floor($south);
-$west = floor($west);
+$south = floordec($south);
+$west = floordec($west);
 
 $im = @imagecreate($width,$height) or die("Cannot Initialize new GD image stream");
 $background_color = imagecolorallocate($im, 255, 255, 255);

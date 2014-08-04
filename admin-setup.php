@@ -206,9 +206,9 @@ if (empty($CONF['geograph_apikey'])) {
 					<small>Short paragraph or two introducing your portal, used on the homepage.</small></td>
 			</tr>
 		</table>
+
 		<h3>Portal Contents</h3>
 		<table cellspacing=0 cellpadding=10 border=1 bgcolor=#eee width="100%">
-
 			<tr>
 				<th>Query</th>
 				<td><input type="text" name="conf[query]" value="<? echo @he($CONF['query']); ?>" size="60" maxlength="64" id="q"/> <a href="#" onclick="return test_q()">Test</a><br/>
@@ -229,6 +229,34 @@ if (empty($CONF['geograph_apikey'])) {
 				<td><textarea name="conf[square_source]" rows="6" cols="80"><? echo @he($CONF['square_source']); ?></textarea><br/>
 					<small>OPTIONAL Lists a credit and explanation for the source of the squares basemap - used for calculating coverage statistics.</small></td>
 			</tr>
+		</table>
+
+		<h3>coveragemap.png.php Options</h3>
+		<p>Can just ignore these if not using coveragemap.png.php, only used if have a list of squares.</p>
+		<table cellspacing=0 cellpadding=10 border=1 bgcolor=#eee width="100%">
+                        <tr>
+                                <th>Plot Option</th>
+				<td><select name="conf[imagemap_grid_display]">
+					<option>wgs84</option>
+					<option<? if ($CONF['imagemap_grid_display'] == 'rectlinear') { print " selected"; }?>>rectlinear</option>
+				</select></td>
+			</tr>
+                        <tr>
+                                <th>Scale</th>
+                                <td>X: <input type="text" name="conf[imagemap_scalex]" value="<? echo @he($CONF['imagemap_scalex']?$CONF['imagemap_scalex']:50); ?>" size="6"/>, 
+                                    Y: <input type="text" name="conf[imagemap_scaley]" value="<? echo @he($CONF['imagemap_scaley']?$CONF['imagemap_scaley']:80); ?>" size="6"/> <br>
+                                        <small>Map Scale ($pixels = $degress * $scalex)</small>
+                        </tr>
+                        <tr>
+                                <th>Pixel Padding</th>
+                                <td><input type="text" name="conf[imagemap_pixels]" value="<? echo @he($CONF['imagemap_pixels']?$CONF['imagemap_pixels']:2); ?>" size="6"/> <br>
+                                        <small>Number of pixels to pad squares (0=1px squares, 1=3px squares, 3=7px squares etc)</small>
+                        </tr>
+                        <tr>
+                                <th>Decimals to Round</th>
+                                <td><input type="text" name="conf[imagemap_decimals]" value="<? echo @he($CONF['imagemap_decimals']?$CONF['imagemap_decimals']:2); ?>" size="6"/> <br>
+                                        <small>Number of decimal places in degree rounding for boundary.</small>
+                        </tr>
 		</table>
 		<br/>
 		<input type="submit" name="update" value="Save Configuration"/>
