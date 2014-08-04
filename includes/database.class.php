@@ -110,7 +110,7 @@ class Database {
 	}
 	
 	function getCol($query) {
-		$result = mysql_query($query, $this->db) or print('<br>Error getColAsKeys: '.mysql_error());
+		$result = mysql_query($query, $this->db) or print('<br>Error getCol: '.mysql_error());
 		if (!mysql_num_rows($result)) {
 			return FALSE;
 		}
@@ -120,23 +120,11 @@ class Database {
 		}
 		return $a;
 	}
-	
-	function getColAsKeys($query) {
-		$result = mysql_query($query, $this->db) or print('<br>Error getColAsKeys: '.mysql_error());
-		if (!mysql_num_rows($result)) {
-			return FALSE;
-		}
-		$a = array();
-		while($row = mysql_fetch_row($result)) {
-			$a[$row[0]] = '';
-		}
-		return $a;
-	}
-	
+		
 	function getAll($query) {
 		$result = mysql_query($query, $this->db) or print('<br>Error getAll: '.mysql_error($this->db));
 		if (!mysql_num_rows($result)) {
-			return FALSE;
+			return array();
 		}
 		$a = array();
 		while($row = mysql_fetch_assoc($result)) {
@@ -145,14 +133,10 @@ class Database {
 		return $a;
 	}
 	
-	function getAssoc2($table,$key,$value) {
-		return getAssoc("SELECT $key, $value FROM $table");
-	}
-	
 	function getAssoc($query) {
 		$result = mysql_query($query, $this->db) or print('<br>Error getAssoc: '.mysql_error());
 		if (!mysql_num_rows($result)) {
-			return FALSE;
+			return array();
 		}
 		$a = array();
 		$row = mysql_fetch_assoc($result);
@@ -170,26 +154,7 @@ class Database {
 		}
 		return $a;
 	}
-	
-	function getAssoc3($query) {
-		$result = mysql_query($query, $this->db) or print('<br>Error getAssoc: '.mysql_error());
-		if (!mysql_num_rows($result)) {
-			return FALSE;
-		}
-		$a = array();
-		if (preg_match('/SELECT .*,.*,.* FROM/i',$query)) {
-			while($row = mysql_fetch_row($result)) {
-				$i = array_shift($row);
-				$a[$i] = $row;
-			}
-		} else {
-			while($row = mysql_fetch_row($result)) {
-				$a[$row[0]] = $row[1];
-			}
-		}
-		return $a;
-	}
-	
+		
 	####################
 	
 	function updates_to_a(&$updates) {
@@ -218,7 +183,7 @@ class Database {
 	function updates_to_insert($table,$updates) {
 		$a = $this->updates_to_a($updates);
 		$table = str_replace('`','',$table); //ugly sql-injection protection!
-		return "INSERT INTO `$table` SET ".join(',',$a);
+		return "INSERT INTO `$table` SET ".join(',',$a).",created=NOW()";
 	}
 	function updates_to_insertupdate($table,$updates) {
 		$a = $this->updates_to_a($updates);
