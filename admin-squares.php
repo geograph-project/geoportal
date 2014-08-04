@@ -2,26 +2,44 @@
 
 include "includes/start.inc.php";
 
-if (empty($_SESSION['user_id']) || empty($_SESSION['admin']) ) {
+if (empty($_SESSION['user_id'])) {
+	$_SESSION['continue'] = "admin-squares.php";
         header("Location: login.php");
         exit;
 }
+if (empty($_SESSION['admin']))
+	die('You need to be an admin to access this facility');
 
 include "templates/header.inc.php";
 
 if (!empty($_POST['content'])) {
+        include "includes/conversionslatlong.class.php";
+        $conv = new ConversionsLatLong();
+
 	$lines = explode("\n",str_replace("\r",'',$_POST['content']));
 
 	foreach ($lines as $idx => $line) {
 		if (preg_match('/^(\s*)(.+?)( *\[\d+\])?\s*$/',$line,$m)) {
-			$gridref = $m[2];
+			$gridref = strtoupper($m[2]);
 			$id = trim($m[3],'[] ');
 
 			$updates = array();
-			if ($id)
-				$updates['square_id'] = $id;
 			$updates['grid_reference'] = $gridref;
-
+			if ($id) {
+				$updates['square_id'] = $id;
+			} elseif (strlen($updates['grid_reference']) == 6) {
+				list($e,$n) = $conv->gridref_to_osgb36($updates['grid_reference']);
+				if ($e && $n) {
+					$updates['e'] = $e; 
+					$updates['n'] = $n;
+				}
+			} elseif (strlen($updates['grid_reference']) == 5) {
+				//todo! need a gridref_to_irish() function!
+			}
+			if (!empty($updates['e'])) {
+				$func = (strlen($updates['grid_reference'])==5)?'irish_to_wgs84':'osgb36_to_wgs84';
+	        	        list($updates['wgs84_lat'],$updates['wgs84_long']) = $conv->{$func}($updates['e'],$updates['n']);
+			}
 			$sql = $db->updates_to_insertupdate($db->table_square,$updates);
 			$db->query($sql);
 			//if (!$id)

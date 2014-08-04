@@ -2,10 +2,13 @@
 
 include "includes/start.inc.php";
 
-if (empty($_SESSION['user_id']) || empty($_SESSION['moderator']) ) {
+if (empty($_SESSION['user_id'])) {
+	$_SESSION['continue'] = "admin-moderate.php";
         header("Location: login.php");
         exit;
 }
+if (empty($_SESSION['moderator']) && empty($_SESSION['admin']))
+	die('You need to be an admin or moderator to access this facility');
 
 include "templates/header.inc.php";
 

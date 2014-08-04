@@ -429,6 +429,54 @@ function osgb36_to_gridref($e,$n) {
 	return $ref;
 }
 
+
+# Convert square such as SU1905 to point containing x=eastings, y=northings
+function gridref_to_osgb36($sq) {
+	if (preg_match('~(?i)^([a-z][a-z])(\d\d)(\d\d)$~', $sq, $m) != 1)
+		return NULL;
+	if (!($pt = $this->myriad2grid($m[1])))
+		return NULL;
+	list($e,$n) = $pt;
+	$e += 1000 * intval($m[2]);
+	$n += 1000 * intval($m[3]);
+	return array($e, $n);
+}
+
+/*
+Function myriad2grid is copyright of Ed Fielden and usable free only for non-commercial purposes,
+see http://www.fieldenmaps.info/cconv/ */
+function myriad2grid($myr){
+	$myr = strtoupper($myr);
+	$c = $myr[0];
+	if ($c == 'S') { 
+	    $e = 0;
+	    $n = 0;
+	} else if ($c == 'T') {
+	    $e = 500000;
+	    $n = 0;
+	} else if ($c == 'N') { 
+	    $n = 500000;
+	    $e = 0;
+	} else if ($c == 'O') {
+	    $n = 500000;
+	    $e = 500000;
+	} else if($c == 'H') {
+	    $n = 1000000;
+	    $e = 0;
+	} else 
+	    return NULL;    
+	$c = $myr[1];
+	if($c == 'I')
+	    return NULL;	    
+	$c = ord($c) - 65;
+	if($c > 8)
+	    $c -= 1;
+	$e += ($c % 5) * 100000;
+	$n += (4 - floor($c/5)) * 100000;
+	return array($e, $n);
+}
+
+
 /**************************
 * General Functions
 ***************************/

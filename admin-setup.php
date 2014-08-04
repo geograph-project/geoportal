@@ -85,7 +85,7 @@ if (empty($row['users'])) {
 } elseif($row['users'] == 1 && $row['rights'] == 'basic') {
 	if ($row['user_id'] == $_SESSION['user_id']) {
 		//they the first user, make them the admin!
-		$db->query("UPDATE {$db->table_user} SET rights = 'basic,admin' WHERE user_id = {$row['user_id']}");
+		$db->query("UPDATE {$db->table_user} SET rights = 'basic,admin,moderator' WHERE user_id = {$row['user_id']}");
 		print "<li>Congratulations. As the first user, you are now the admin of this portal.</li>";
 	} else {
 		//else get them to login!
