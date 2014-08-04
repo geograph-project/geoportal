@@ -2,6 +2,9 @@
 
 include "includes/start.inc.php";
 
+customExpiresHeader(3600);
+customGZipHandlerStart();
+
 include "templates/header.inc.php";
 
 print '<h3><b>HeatMap</b></h3>';
@@ -14,8 +17,18 @@ include "includes/filter.inc.php";
 
 
  <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=visualization"></script>
+
+<? if (!empty($CONV['map_show_gb_grid'])) { ?>
+<script type="text/javascript" src="includes/grid-projection.js"></script>
+<script type="text/javascript" src="includes/v3_uk_grat.js"></script>
+<? } ?>
+
   <script>
 var map, pointArray, heatmap;
+
+var grid;
+var proj;
+
 
 var pointData = [<?
 foreach ($db->getAll("SELECT wgs84_lat,wgs84_long FROM {$db->table_image} i $tables WHERE $where") as $row) {
@@ -35,6 +48,13 @@ function initialize() {
   map = new google.maps.Map(document.getElementById('map-canvas'),
       mapOptions);
   map.fitBounds(bounds);
+
+<? if (!empty($CONV['map_show_gb_grid'])) { ?>
+    proj = new GridProjection();
+    proj.initialize();
+
+    grid = new OgbGrat3(map, proj);
+<? } ?>
 
   var pointArray = new google.maps.MVCArray(pointData);
 

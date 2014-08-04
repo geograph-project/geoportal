@@ -78,18 +78,20 @@ if (empty($row['users'])) {
 	} else {
 		//else get them to login!
 		$_SESSION['continue'] = "admin-setup.php";
-		header("Location: ./login.php");
+		@header("Location: ./login.php");
+		print '<meta http-equiv="refresh" content="0; url=login.php">';
 		exit;
 	}
 } elseif($row['users'] == 1 && $row['rights'] == 'basic') {
 	if ($row['user_id'] == $_SESSION['user_id']) {
 		//they the first user, make them the admin!
 		$db->query("UPDATE {$db->table_user} SET rights = 'basic,admin,moderator' WHERE user_id = {$row['user_id']}");
-		print "Congratulations. As the first user, you are now the admin of this portal.";
+		print "<li>Congratulations. As the first user, you are now the admin of this portal.</li>";
 	} else {
 		//else get them to login!
 		$_SESSION['continue'] = "admin-setup.php";
-                header("Location: ./login.php");
+                @header("Location: ./login.php");
+		print '<meta http-equiv="refresh" content="0; url=login.php">';
                 exit;
 	}
 } elseif (!empty($_SESSION['user_id'])) {
@@ -110,7 +112,8 @@ if (empty($row['users'])) {
 
 } else {
 	$_SESSION['continue'] = "admin-setup.php";
-	header("Location: ./login.php");
+	@header("Location: ./login.php");
+	print '<meta http-equiv="refresh" content="0; url=login.php">';
         exit;	
 }
 
@@ -167,17 +170,17 @@ if (empty($CONF['geograph_apikey'])) {
 			</tr>
                         <tr>
                                 <th>API Key</th>
-                                <td><input type="text" name="conf['geograph_apikey]" value="<? echo @he($CONF['geograph_apikey']); ?>" size="60" maxlength="64"/><br/>
+                                <td><input type="text" name="conf[geograph_apikey]" value="<? echo @he($CONF['geograph_apikey']); ?>" size="60" maxlength="64"/><br/>
                                         <small>Your Geograph API Key, get from <a href="http://<? echo $CONF['geograph_domain'];?>/admin/mykey.php">here</a> - remember keep this secret!</small></td>
                         </tr>
                         <tr>
                                 <th>API Access Key</th>
-                                <td><input type="text" name="conf['geograph_accesskey]" value="<? echo @he($CONF['geograph_accesskey']); ?>" size="60" maxlength="64"/><br/>
+                                <td><input type="text" name="conf[geograph_accesskey]" value="<? echo @he($CONF['geograph_accesskey']); ?>" size="60" maxlength="64"/><br/>
                                         <small>Your Geograph Access Key, get from <a href="http://<? echo $CONF['geograph_domain'];?>/admin/mykey.php">here</a></small></td>
                         </tr>
                         <tr>
                                 <th>API Shared Magic</th>
-                                <td><input type="text" name="conf['geograph_magic]" value="<? echo @he($CONF['geograph_magic']); ?>" size="60" maxlength="64"/><br/>
+                                <td><input type="text" name="conf[geograph_magic]" value="<? echo @he($CONF['geograph_magic']); ?>" size="60" maxlength="64"/><br/>
                                         <small>Your Geograph Shared Magic, get from <a href="http://<? echo $CONF['geograph_domain'];?>/admin/mykey.php">here</a> - remember keep this secret!</small></td>
                         </tr>
 		</table>

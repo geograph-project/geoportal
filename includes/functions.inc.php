@@ -41,34 +41,34 @@ function getGeographUrl($gridimage_id,$hash,$size = 'small') {
 
 //todo, compat for json_decode
 
-function smarty_function_external($params)
+function externalLink($params)
 {
-        global $CONF;
-        //get params and use intelligent defaults...
-        $href=str_replace(' ','+',$params['href']);
-        if (strpos($href,'http://') !== 0)
-                $href ="http://$href";
+	global $CONF;
+  	//get params and use intelligent defaults...
+  	$href=str_replace(' ','+',$params['href']);
+  	if (strpos($href,'http://') !== 0)
+  		$href ="http://$href";
 
-        if (isset($params['text']))
-                $text=$params['text'];
-        else
-                $text=$href;
+  	if (isset($params['text']))
+  		$text=$params['text'];
+  	else
+  		$text=$href;
 
-        if (isset($params['title']))
-                $title=$params['title'];
-        else
-                $title=$text;
+  	if (isset($params['title']))
+		$title=$params['title'];
+	else
+		$title=$text;
+	
+	if (isset($params['nofollow']))
+		$title .= "\" rel=\"nofollow"; 	
 
-        if (isset($params['nofollow']))
-                $title .= "\" rel=\"nofollow";
-
-        if ($params['target'] == '_blank' || 1) {
-                return "<span class=\"nowrap\"><a title=\"$title\" href=\"$href\" target=\"_blank\">$text</a>".
-                        "<img style=\"padding-left:2px;\" alt=\"External link\" title=\"External link - opens in a new window\" src=\"http://s0.geograph.org.uk/img/newwin.png\" width=\"10\" height=\"10\"/></span>";
-        } else {
-                return "<span class=\"nowrap\"><a title=\"$title\" href=\"$href\">$text</a>".
-                        "<img style=\"padding-left:2px;\" alt=\"External link\" title=\"External link - shift click to open in new window\" src=\"http://s0.geograph.org.uk/img/external.png\" width=\"10\" height=\"10\"/></span>";
-        }
+  	if ($params['target'] == '_blank') {
+  		return "<span class=\"nowrap\"><a title=\"$title\" href=\"$href\" target=\"_blank\">$text</a>".
+  			"<img style=\"padding-left:2px;\" alt=\"External link\" title=\"External link - opens in a new window\" src=\"http://s0.geograph.org.uk/img/newwin.png\" width=\"10\" height=\"10\"/></span>";
+  	} else {
+  		return "<span class=\"nowrap\"><a title=\"$title\" href=\"$href\">$text</a>".
+  			"<img style=\"padding-left:2px;\" alt=\"External link\" title=\"External link - shift click to open in new window\" src=\"http://s0.geograph.org.uk/img/external.png\" width=\"10\" height=\"10\"/></span>";
+  	}
 }
 
 
@@ -240,4 +240,16 @@ function htmlentities2( $myHTML,$quotes = ENT_COMPAT,$char_set = 'ISO-8859-1')
 function htmlnumericentities($myXML){
 	return str_replace('&#38;amp;','&amp;',preg_replace('/[^!-%\x27-;=?-~ ]/e', '"&#".ord("$0").chr(59)', htmlspecialchars($myXML)));
 }
+
+
+function MakeLinks($posterText) {
+	$posterText = preg_replace('/(?<!["\'>F=])(https?:\/\/[\w\.-]+\.\w{2,}\/?[\w\~\-\.\?\,=\'\/\\\+&%\$#\(\)\;\:]*)(?<!\.)(?!["\'])/e',"externalLink(array('href'=>\"\$1\",'text'=>\"\$1\",'nofollow'=>1,'title'=>\"\$1\"))",$posterText);
+
+	$posterText = preg_replace('/(?<![\/F\.])(www\.[\w\.-]+\.\w{2,}\/?[\w\~\-\.\?\,=\'\/\\\+&%\$#\(\)\;\:]*)(?<!\.)(?!["\'])/e',"externalLink(array('href'=>\"http://\$1\",'text'=>\"\$1\",'nofollow'=>1,'title'=>\"\$1\"))",$posterText);
+
+	$posterText = str_replace("/\n\n\n/",'<br/><br/>',$posterText);
+
+	return $posterText;
+}
+
 

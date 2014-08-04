@@ -9,8 +9,6 @@ if (!empty($_GET))
 
 
 $template_links = array();
-if (basename($_SERVER['PHP_SELF']) != 'index.php')
-	$template_links['./'] = 'back to homepage';
 
 if (empty($_GET) && !empty($CONF['query']))
 	$template_links['browser.php'] = 'browser';
@@ -60,9 +58,9 @@ if (!empty($_SESSION['admin']))
 	<div class="tabs">
 		<? foreach ($template_links as $link => $html) {
 			if (basename($_SERVER['PHP_SELF']) == $link) {
-			        print "<a href=\"$link\" class=\"selected\">".he($html)."</a>";
+			        print "<a href=\"$link\" class=\"selected\">".he($html)."</a> ";
 			} else
-			        print "<a href=\"$link\">".he($html)."</a>";
+			        print "<a href=\"$link\">".he($html)."</a> ";
 		} ?>
 	</div>
 </header>

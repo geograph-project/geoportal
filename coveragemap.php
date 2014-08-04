@@ -2,9 +2,14 @@
 
 include "includes/start.inc.php";
 
+customExpiresHeader(3600);
+customGZipHandlerStart();
+
 include "templates/header.inc.php";
 
 print '<h3>Coverage Map</h3>';
+
+print '<p>View <a href="squares.php">green squares as a list</a></p>';
 
 #################
 
@@ -16,7 +21,7 @@ print '<h3>Coverage Map</h3>';
                 print "Total Squares: ".dis($row['squares']).", of which ".dis($row['photographed'])." have photographs; which is a coverage of <b>{$row['percentage']}%</b>";
                 print " <a href=statistics.php>MORE...</a>";
 	        if (!empty($CONF['square_source'])) {
-			print "<div class=source>".nl2br(he($CONF['square_source']))."</div>";
+			print "<div class=source>".nl2br(MakeLinks(he($CONF['square_source'])))."</div>";
 		}
                 print "</div>";
         }
@@ -49,12 +54,24 @@ if (empty($_GET['dynamic'])) { ?>
 	<br style=clear:both>
 
  <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+
+<? if (!empty($CONV['map_show_gb_grid'])) { ?>
+<script type="text/javascript" src="includes/grid-projection.js"></script>
+<script type="text/javascript" src="includes/v3_uk_grat.js"></script>
+<? } ?>
+
   <script>
 var map;
+	var grid;
+	var proj;
 
 var pointData = [<?
 
-$rows = $db->getAll("SELECT grid_reference,wgs84_lat,wgs84_long,images FROM {$db->table_square} WHERE wgs84_lat != 0") ;
+$where = "wgs84_lat != 0";
+if (isset($_GET['images']))
+	$where .= " AND images = ".intval($_GET['images']);
+
+$rows = $db->getAll("SELECT grid_reference,wgs84_lat,wgs84_long,images FROM {$db->table_square} WHERE $where") ;
 
 $sep = '';
 foreach ($rows as $row) {
@@ -93,7 +110,13 @@ function initialize() {
       mapOptions);
   map.fitBounds(bounds);
 
-  <?
+<? if (!empty($CONV['map_show_gb_grid'])) { ?>
+    proj = new GridProjection();
+    proj.initialize();
+
+    grid = new OgbGrat3(map, proj);
+<? }
+
   foreach ($rows as $row) {
         print "createMarker('{$row['grid_reference']}', {$row['wgs84_lat']}, {$row['wgs84_long']}, {$row['images']})\n";
   } ?>

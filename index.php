@@ -5,7 +5,7 @@ include "includes/start.inc.php";
 include "templates/header.inc.php";
 
 if (!empty($CONF['intro'])) {
-	print "<div class=intro>".nl2br(he($CONF['intro']))."</div>";
+	print "<div class=intro>".nl2br(MakeLinks(he($CONF['intro'])))."</div>";
 }
 if (!empty($CONF['submission_prompt'])) {
 	print "<div class=submission_prompt>".nl2br(he($CONF['submission_prompt']))." <a href=\"http://{$CONF['geograph_domain']}/submit.php\">Open Geograph Submission Process</a></div>";
@@ -58,9 +58,19 @@ print "</ol>";
 print "</div>";
 
 print "<div style=\"margin-left:300px\">";
-print "<p>A sampling of images... (<a href=\"images.php\">more</a>)</p>";
 
-foreach ($db->getAll("SELECT * FROM {$db->table_image} WHERE active != 'deleted' ORDER BY RAND(DATE(NOW())+0) LIMIT 16") as $row) {
+$rows = $db->getAll("SELECT * FROM {$db->table_image} WHERE active != 'deleted' AND created > DATE_SUB(NOW(),INTERVAL 3 DAY) ORDER BY RAND(DATE(NOW())+0) LIMIT 16");
+
+if (!empty($rows)) {
+	print "<p>Added in last 3 days... (<a href=\"images.php\">more</a>)</p>";
+} else {
+
+	$rows = $db->getAll("SELECT * FROM {$db->table_image} WHERE active != 'deleted' ORDER BY RAND(DATE(NOW())+0) LIMIT 16");
+
+	print "<p>A sampling of images... (<a href=\"images.php\">more</a>)</p>";
+}
+
+foreach ($rows as $row) {
 	?>
 	<div class=thumb>
 		<a href="http://<? echo $CONF['geograph_domain']; ?>/photo/<? echo $row['image_id']; ?>" 

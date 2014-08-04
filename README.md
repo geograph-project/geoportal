@@ -50,9 +50,9 @@ Installation
 	
 	https://github.com/barryhunter/geoportal/archive/master.zip
 	
-* Copy config.sample.php to config.inc.php
+* Copy config.sample.php to config.php
 
-* Edit config.inc.php to include connection details for your database
+* Edit config.php to include connection details for your database
 
 * Upload files to server - just put all the files in a folder of your choice
 
